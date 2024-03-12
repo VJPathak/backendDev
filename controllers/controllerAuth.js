@@ -34,7 +34,7 @@ const postSignup = (req, res) => {
       
                 const data = {userId: String(uid), userName: String(name), userPhno: String(phno), userAge: String(age), isActive: 1, createdAt: Date.now()};
                 //posting data into userData collection
-                await db.collection('userData').add(data);
+                await db.collection('userData').doc(uid).set(data);
                 }
         
             run().catch(console.error);
