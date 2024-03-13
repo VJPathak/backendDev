@@ -21,4 +21,8 @@ app.use(session({
 app.use('/', routes);
 
 //Starting the server at port 3000
+app.listen(process.env.PORT, function() { 
+  console.log('Server running on port 3000'); 
+  console.log("Initiating Our Project :) ");
+});
 
