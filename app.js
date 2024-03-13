@@ -21,8 +21,4 @@ app.use(session({
 app.use('/', routes);
 
 //Starting the server at port 3000
-app.listen("backenddev-production-3f3c.up.railway.app", function() { 
-  console.log('Server running on port 3000'); 
-  console.log("Initiating Our Project :) ");
-});
 
