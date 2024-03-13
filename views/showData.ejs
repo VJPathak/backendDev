@@ -1,0 +1,29 @@
+<html>
+
+<head>
+    <title>Output Page</title>
+</head>
+
+<body>
+
+    <% for (let i = 0; i < data.length; i++) { %>
+
+      	<table width="100%" border="1">
+      		<tr align="center">
+      			<td width="10%">  <%= i+1 %>  </td>
+      			<td width="25%">  <%= data[i].productName %>  </td>
+      			<td width="30%">  <%= data[i].productCategory %>  </td>
+      			<td width="25%">  <%= data[i].productPrice %>  </td>
+      			<td width="30%">  <%= data[i].productSize %>  </td>
+                <td width="25%">  <%= data[i].productDescription %>  </td>
+      			<td width="30%">  <%= data[i].productImages %>  </td>
+                <td width="30%">  <%= data[i].productLeft %>  </td>
+      		</tr>
+      	</table>
+  	
+		<% } %>
+
+
+</body>
+
+</html>
