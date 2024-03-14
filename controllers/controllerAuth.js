@@ -243,7 +243,7 @@ const getItemList = (req, res) => {
     
     });
     console.log(viewData)
-    res.render("showData", {data : viewData});
+    // res.render("showData", {data : viewData});
     }
       
     run().catch(console.error);
