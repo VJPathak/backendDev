@@ -242,7 +242,8 @@ const getItemList = (req, res) => {
 
     
     });
-    console.log(viewData)
+    console.log(viewData);
+    res.json(viewData);
     // res.render("showData", {data : viewData});
     }
       
