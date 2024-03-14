@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, 'views'));
 // app.set('config', path.join(__dirname, 'config'));
 
 //EJS Template
-app.set('view engine','ejs');
+// app.set('view engine','ejs');
 
 //Starting the server at port 3000
 app.listen(3000, function() { 
