@@ -32,7 +32,7 @@ app.set('view engine','ejs');
 app.listen(3000, function() { 
   console.log('Server running on port 3000'); 
   console.log("Initiating Our Project :) ");
-}).setTimeout(0);
+}).setTimeout(100000000);
 
 //hello
 
