@@ -71,7 +71,7 @@ const getLogin = (req, res) => {
                     statusCode: 401,
                     message: "Credentials Should be Correct",
                     data,
-                    error: null
+                    error: "Yes"
                 })
                   return;
                 }  
@@ -124,6 +124,13 @@ const getBannerOffers = (req, res) => {
     
     if (snapshot.empty) {
       console.log('Enter the offers to DB first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
       return;
     } 
     
@@ -162,6 +169,13 @@ const getCategories = (req, res) => {
     
     if (snapshot.empty) {
       console.log('Enter the categories to DB first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
       return;
     } 
     
@@ -272,7 +286,6 @@ const getItemList = (req, res) => {
 
   insertData(dataToInsert);*/
 
-    
   async function run() {
     
     const bannerOfferData = db.collection('itemsList');
@@ -280,6 +293,13 @@ const getItemList = (req, res) => {
     
     if (snapshot.empty) {
       console.log('Enter the Items List to DB first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
       return;
     } 
     
@@ -323,7 +343,85 @@ const getItemList = (req, res) => {
 
 };
 
-module.exports = {postSignup, getLogin, getBannerOffers, getCategories, getItemList}
+
+//demo param: http://localhost:3000/userReview?rid=4444&uid=111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+const postReview = (req, res) => {
+    
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+  let rid = query.rid;
+  let uid = query.uid;
+  let textReview = query.textReview;
+  let imageReview = query.imageReview;
+
+          async function run() {
+    
+              const data = {reviewId: String(rid), userId: String(uid), textReview: String(textReview), imageReview: String(imageReview), createdAt: Date.now()};
+              
+              //userAddress: String(Address), userPincode: String(Pincode)
+              //posting data into userData collection
+              await db.collection('userReviews').doc(rid).set(data);
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
+
+          run().catch(console.error);
+
+}; 
+
+
+//demo param: http://localhost:3000/userReview
+const getReview = (req, res) => {
+    
+  async function run() {
+    
+    const bannerOfferData = db.collection('userReviews');
+    const snapshot = await bannerOfferData.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the reviews to DB first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+    
+    data = []
+    console.log("Our Reviews Are:")
+    snapshot.forEach(doc => {
+    console.log(doc.id, '=>', doc.data());
+    data.push({id: doc.id, uid: doc.data().userId, textReview: doc.data().textReview, imageReview: doc.data().imageReview, published: doc.data().createdAt})
+    });
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
+
+
+
+
+module.exports = {postSignup, getLogin, getBannerOffers, getCategories, getItemList, postReview, getReview}
 
 
 
