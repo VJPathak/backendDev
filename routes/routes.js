@@ -13,11 +13,11 @@ let router = express.Router();
 
 router
   .route("/signup")
-  // .get((req, res) => {
-  //   res.send("Pl Select Post Request");
-  //   res.json("Pl Select Post Request");
-  // })
-  .get(postSignup);
+  .get((req, res) => {
+    res.send("Pl Select Post Request");
+    res.json("Pl Select Post Request");
+  })
+  .post(postSignup);
 
 router
   .route("/login")
