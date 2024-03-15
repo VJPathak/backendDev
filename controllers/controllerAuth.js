@@ -1,11 +1,11 @@
 const admin = require('firebase-admin');
 
-// const serviceAccount = require("../connection.json");
+const serviceAccount = require("../connection.json");
 // const validate = require("../config/validators")
 
 //initializing our secret key
 admin.initializeApp({
-  credential: admin.credential.cert(process.env.VAR)
+  credential: admin.credential.cert(serviceAccount)
 });
 
 const db = admin.firestore();
