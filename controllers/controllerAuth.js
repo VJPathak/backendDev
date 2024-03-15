@@ -5,7 +5,7 @@ const admin = require('firebase-admin');
 
 //initializing our secret key
 admin.initializeApp({
-  credential: admin.credential.cert(process.env.VAR)
+  credential: admin.credential.cert(VAR)
 });
 
 const db = admin.firestore();
