@@ -12,7 +12,7 @@ let router = express.Router();
 router
   .route("/signup")
   .get((req, res) => {
-    res.send("Hello");
+    res.json("Pl Select POST Request");
   })
   .post(postSignup);
 
