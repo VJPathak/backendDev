@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 
-// const serviceAccount = require("../config/connection.json");
+// const serviceAccount = require("../connection.json");
 // const validate = require("../config/validators")
 
 //initializing our secret key
