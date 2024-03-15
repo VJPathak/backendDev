@@ -5,6 +5,8 @@ let getLogin = controller.getLogin;
 let getBannerOffers = controller.getBannerOffers;
 let getCategories = controller.getCategories;
 let getItemList = controller.getItemList;
+let postReview = controller.postReview;
+let getReview = controller.getReview;
 
 const express = require("express");
 let router = express.Router();
@@ -12,7 +14,8 @@ let router = express.Router();
 router
   .route("/signup")
   .get((req, res) => {
-    res.json("Pl Select POST Request");
+    res.send("Pl Select Post Request");
+    res.json("Pl Select Post Request");
   })
   .post(postSignup);
 
@@ -23,6 +26,11 @@ router
 router
   .route("/bannerOffers")
   .get(getBannerOffers);
+
+router
+  .route("/userReview")
+  .get(getReview)
+  .post(postReview);
 
 router
   .route("/categories")
