@@ -30,12 +30,12 @@ router
   .get(getBannerOffers);
 
 router
-  .route("/userReview/menswear")
+  .route("/userReviewTOmenswear")
   .post(postCat1Review)
   // .post(postReview);
 
 router
-  .route("/userReview/womenswear")
+  .route("/userReviewTOwomenswear")
   .post(postCat2Review)
   // .post(postReview);
 
