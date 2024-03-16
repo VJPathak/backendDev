@@ -31,6 +31,8 @@ const postSignup = (req, res) => {
                 
                 //userAddress: String(Address), userPincode: String(Pincode)
                 //posting data into userData collection
+
+                //await db.collection('Users').doc(uid).collection('h').doc().set(data);
                 await db.collection('Users').doc(uid).set(data);
                 let resObj = {
                   status: "success",
@@ -108,51 +110,90 @@ const getLogin = (req, res) => {
 
 
 //demo URL: "http://localhost:3000/bannerOffers"
-// const getBannerOffers = (req, res) => {
+const getBannerOffers = (req, res) => {
     
-//   async function run() {
-    
-//     const bannerOfferData = db.collection('bannerOffers');
-//     const snapshot = await bannerOfferData.get(); 
-    
-//     if (snapshot.empty) {
-//       console.log('Enter the offers to DB first');
-//       res.json({
-//         status: "No Content",
-//         statusCode: 204,
-//         message: "Collection Seems To Be Empty",
-//         data,
-//         error: null
-//     })
-//       return;
-//     } 
-    
-//     data = []
-//     console.log("Our Banner Offers Are:")
-//     snapshot.forEach(doc => {
-//     console.log(doc.id, '=>', doc.data());
-//     data.push({id: doc.id, imageURL: doc.data().imageURL})
-//     });
+  async function run() {
 
-//     let resObj = {
-//       status: "success",
-//       statusCode: 200,
-//       message: "OK",
-//       data,
-//       error: null
-//   }
+    // const dataToInsert = [
+    //   {
+    //     imageURL: 'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link'
+    //   },
+    //   {
+    //     imageURL: 'https://drive.google.com/file/d/1JJdBTXKSMZmeySjv6YSFFSlF1biR4bq0/view?usp=drive_link'
+    //   },
+    //   {
+    //     imageURL: 'https://drive.google.com/file/d/1oJ7TMruCgbhOHGOwWyQ4HKSUTD-v2iag/view?usp=drive_link'
+    //   },
+    //   {
+    //     imageURL: 'https://drive.google.com/file/d/1j2DI1pzeiQWUhsf-DgJFlH3HvNgCdQwj/view?usp=drive_link'
+    //   },
+    //   {
+    //     imageURL: 'https://drive.google.com/file/d/11nrnKJd7jCtc0NMFaddZdlp1rcuWxUXR/view?usp=drive_link'
+    //   },
+    //   {
+    //     imageURL: 'https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link'
+    //   }
+    // ];
+
+    // async function insertData(data) {
+    //   try {
+    //     const writeBatch = db.batch();
+    
+    //     data.forEach(docData => {
+    //       const ref = db.collection('Banner Offers').doc(); // Generate unique IDs
+    //       writeBatch.set(ref, docData);
+    //     });
+    
+    //     await writeBatch.commit();
+    //     console.log('Data successfully inserted!');
+    //   } catch (error) {
+    //     console.error('Error inserting data:', error);
+    //   }
+    // }
+
+    // insertData(dataToInsert);
+    
+    const bannerOfferData = db.collection('Banner Offers');
+    const snapshot = await bannerOfferData.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the offers to DB first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+    
+    data = []
+    console.log("Our Banner Offers Are:")
+    snapshot.forEach(doc => {
+    console.log(doc.id, '=>', doc.data());
+    data.push({id: doc.id, imageURL: doc.data().imageURL})
+    });
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
 
 
-//     res.json(resObj)
+    res.json(resObj)
         
-//     }
+    }
       
-//     run().catch(console.error);
+    run().catch(console.error);
 
-// }; 
+}; 
 
 
-// //demo URL: http://localhost:3000/categories
+//demo URL: http://localhost:3000/categories
 // const getCategories = (req, res) => {
     
 //   async function run() {
@@ -201,83 +242,308 @@ const getLogin = (req, res) => {
 //     run().catch(console.error);
 
 
-//   //incase we want-to insert data categories collection
-//    /* const dataToInsert = [
-//       {
-//         type: 'Womens Wear'
-//       },
-//       {
-//         type: 'WFH Casual Wear'
-//       }
-//     ];
+  //incase we want-to insert data categories collection
+   /* const dataToInsert = [
+      {
+        type: 'Womens Wear'
+      },
+      {
+        type: 'WFH Casual Wear'
+      }
+    ];
 
-//     async function insertData(data) {
-//       try {
-//         const writeBatch = db.batch();
+    async function insertData(data) {
+      try {
+        const writeBatch = db.batch();
     
-//         data.forEach(docData => {
-//           const ref = db.collection('categories').doc(); // Generate unique IDs
-//           writeBatch.set(ref, docData);
-//         });
+        data.forEach(docData => {
+          const ref = db.collection('categories').doc(); // Generate unique IDs
+          writeBatch.set(ref, docData);
+        });
     
-//         await writeBatch.commit();
-//         console.log('Data successfully inserted!');
-//       } catch (error) {
-//         console.error('Error inserting data:', error);
-//       }
-//     }
+        await writeBatch.commit();
+        console.log('Data successfully inserted!');
+      } catch (error) {
+        console.error('Error inserting data:', error);
+      }
+    }
 
-//     insertData(dataToInsert);*/
+    insertData(dataToInsert);*/
 
 // }; 
 
+//demo param: http://localhost:3000/menswear?productDesc=sampleDescription&productName=tshirt&id=111&photos=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&price=3000&size=XXL&status=dispatched&deliveryDate=SomeDate&deliveryTime=SomeTime&productsLeft=10&vendorName=Vashishth
+const postItemListCat1 = (req, res) => {
 
-// //http://www.localhost:3000/itemList
+    let query = require('url').parse(req.url,true).query;
+    let itemID = query.id;
+    let productDesc = query.productDesc;
+    let photos = query.photos;
+    let price = query.price;
+    let size = query.size;
+    let status = query.status;
+    let deliveryDate = query.deliveryDate;
+    let deliveryTime = query.deliveryTime;
+    let productsLeft = query.productsLeft;
+    let vendorName = query.vendorName;
+    let productName = query.productName;
+
+            async function run() {
+      
+              const data = {
+                productName: productName,
+                productPrice: Number(price),
+                productSize: size,
+                productDescription: productDesc,
+                productImages: photos,
+                productLeft: Number(productsLeft),
+                status: status,
+                deliveryDate: deliveryDate,
+                deliveryTime: deliveryTime,
+                vendorName: vendorName,
+                isActive: 1,
+                reviews: Array(), 
+                createdAt: Date.now()
+              }
+
+              console.log(data)
+                
+                await db.collection("Category1").doc(itemID).set(data);
+                let resObj = {
+                  status: "success",
+                  statusCode: 200,
+                  message: "OK",
+                  data,
+                  error: null
+              }
+              res.json(resObj)
+            }
+
+            run().catch(console.error);
+
+};
+
+
+//demo param: http://localhost:3000/womenswear?productDesc=sampleDescription&productName=tshirt&id=1111&photos=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&price=3000&size=XXL&status=dispatched&deliveryDate=SomeDate&deliveryTime=SomeTime&productsLeft=10&vendorName=Vashishth
+
+const postItemListCat2 = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let itemID = query.id;
+  let productDesc = query.productDesc;
+  let photos = query.photos;
+  let price = query.price;
+  let size = query.size;
+  let status = query.status;
+  let deliveryDate = query.deliveryDate;
+  let deliveryTime = query.deliveryTime;
+  let productsLeft = query.productsLeft;
+  let vendorName = query.vendorName;
+  let productName = query.productName;
+
+          async function run() {
+    
+            const data = {
+              productName: productName,
+              productPrice: Number(price),
+              productSize: size,
+              productDescription: productDesc,
+              productImages: photos,
+              productLeft: Number(productsLeft),
+              status: status,
+              deliveryDate: deliveryDate,
+              deliveryTime: deliveryTime,
+              vendorName: vendorName,
+              isActive: 1,
+              reviews: Array(), 
+              createdAt: Date.now()
+            }
+
+            console.log(data)
+              
+              await db.collection("Category2").doc(itemID).set(data);
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
+
+          run().catch(console.error);
+
+};
+
+
+
+// http://localhost:3000/menswear
+const getItemListCat1 = (req, res) => {
+    
+  async function run() {
+    
+    const category1Data = db.collection('Category1');
+    const snapshot = await category1Data.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Category-1(Menswear) Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+    
+    data = []
+    console.log("Items In Category-1(Menswear) Are:")
+    snapshot.forEach(doc => {
+    console.log(doc.id, '=>', doc.data());
+    data.push(
+      {
+        id: doc.id, 
+        productName: doc.data().productName,
+        productPrice: doc.data().price,
+        productSize: doc.data().size,
+        productDescription: doc.data().productDesc,
+        productImages: doc.data().photos,
+        productLeft: doc.data().productsLeft,
+        status: doc.data().status,
+        deliveryDate: doc.data().deliveryDate,
+        deliveryTime: doc.data().deliveryTime,
+        vendorName: doc.data().vendorName,
+        isActive: doc.data().isActive
+      })
+    });
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+
+
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
+
+
+// http://localhost:3000/womenswear
+const getItemListCat2 = (req, res) => {
+    
+  async function run() {
+    
+    const category1Data = db.collection('Category2');
+    const snapshot = await category1Data.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Category-2(Womenswear) Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+    
+    data = []
+    console.log("Items In Category-2(Womenswear) Are:")
+    snapshot.forEach(doc => {
+    console.log(doc.id, '=>', doc.data());
+    data.push(
+      {
+        id: doc.id, 
+        productName: doc.data().productName,
+        productPrice: doc.data().price,
+        productSize: doc.data().size,
+        productDescription: doc.data().productDesc,
+        productImages: doc.data().photos,
+        productLeft: doc.data().productsLeft,
+        status: doc.data().status,
+        deliveryDate: doc.data().deliveryDate,
+        deliveryTime: doc.data().deliveryTime,
+        vendorName: doc.data().vendorName,
+        isActive: doc.data().isActive
+      })
+    });
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+
+
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
+
+
+
+
+//http://www.localhost:3000/itemList
 // const getItemList = (req, res) => {
 
-//   //to insert the data into itemList collection
-//   /*const dataToInsert = [
-//     {
-//       productName: 'BULLMER',
-//       productCategory: 'Mens Wear',
-//       productPrice: 3000,
-//       productSize: ['S', 'M', 'L', 'XL', 'XXL'],
-//       productDescription: "Graphic Printed Round Neck Oversized Cotton T-shirt",
-//       productImages: ['https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-//       'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link'],
-//       productLeft: 10
+  //to insert the data into itemList collection
+  /*const dataToInsert = [
+    {
+      productName: 'BULLMER',
+      productCategory: 'Mens Wear',
+      productPrice: 3000,
+      productSize: ['S', 'M', 'L', 'XL', 'XXL'],
+      productDescription: "Graphic Printed Round Neck Oversized Cotton T-shirt",
+      productImages: ['https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
+      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link'],
+      productLeft: 10
 
-//       //new modifications
-//       vendorName:"Vashishth Pathak",
+      //new modifications
+      vendorName:"Vashishth Pathak",
 
-//     }
-//   ];
+    }
+  ];
 
-//   async function insertData(data) {
-//     try {
-//       const writeBatch = db.batch();
+  async function insertData(data) {
+    try {
+      const writeBatch = db.batch();
   
-//       data.forEach(docData => {
-//         const ref = db.collection('itemsList').doc(); // Generate unique IDs
-//         writeBatch.set(ref, docData);
-//       });
+      data.forEach(docData => {
+        const ref = db.collection('itemsList').doc(); // Generate unique IDs
+        writeBatch.set(ref, docData);
+      });
   
-//       await writeBatch.commit();
-//       console.log('Data successfully inserted!');
-//     } catch (error) {
-//       console.error('Error inserting data:', error);
-//     }
-//   }
+      await writeBatch.commit();
+      console.log('Data successfully inserted!');
+    } catch (error) {
+      console.error('Error inserting data:', error);
+    }
+  }
 
-//   insertData(dataToInsert);*/
+  insertData(dataToInsert);*/
 
 //   async function run() {
     
@@ -337,85 +603,83 @@ const getLogin = (req, res) => {
 // };
 
 
-// //demo param: http://localhost:3000/userReview?rid=4444&uid=111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-// const postReview = (req, res) => {
+//demo param: http://localhost:3000/userReview/menswear?ratings=5&rid=4444&itemid=111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+const postCat1Review = (req, res) => {
     
-//   //option-1
-//   let query = require('url').parse(req.url,true).query;
-//   let rid = query.rid;
-//   let uid = query.uid;
-//   let textReview = query.textReview;
-//   let imageReview = query.imageReview;
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+  let rid = query.rid;
+  let itemid = query.itemid;
+  let uid = query.uid;
+  let textReview = query.textReview;
+  let imageReview = query.imageReview;
+  let ratings = query.ratings;
 
-//           async function run() {
+          async function run() {
     
-//               const data = {reviewId: String(rid), userId: String(uid), textReview: String(textReview), imageReview: String(imageReview), createdAt: Date.now()};
+              const data = {ratings: Number(ratings), textReview: String(textReview), imageReview: String(imageReview), createdAt: Date.now()};
               
-//               //userAddress: String(Address), userPincode: String(Pincode)
-//               //posting data into userData collection
-//               await db.collection('userReviews').doc(rid).set(data);
-//               let resObj = {
-//                 status: "success",
-//                 statusCode: 200,
-//                 message: "OK",
-//                 data,
-//                 error: null
-//             }
-//             res.json(resObj)
-//           }
+              //userAddress: String(Address), userPincode: String(Pincode)
+              //posting data into userData collection
+              await db.collection('Users').doc(uid).collection("Reviews").doc(itemid).set(data);
+              let FieldValue = require('firebase-admin').firestore.FieldValue;
+              await db.collection('Category1').doc(itemid).update("reviews", FieldValue.arrayUnion(textReview));
 
-//           run().catch(console.error);
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
 
-// }; 
+          run().catch(console.error);
+
+}; 
 
 
-// //demo param: http://localhost:3000/userReview
-// const getReview = (req, res) => {
+//demo param: http://localhost:3000/userReview/womenswear?ratings=5&rid=4444&itemid=1111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+const postCat2Review = (req, res) => {
     
-//   async function run() {
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+  let rid = query.rid;
+  let itemid = query.itemid;
+  let uid = query.uid;
+  let textReview = query.textReview;
+  let imageReview = query.imageReview;
+  let ratings = query.ratings;
+
+          async function run() {
     
-//     const bannerOfferData = db.collection('userReviews');
-//     const snapshot = await bannerOfferData.get(); 
-    
-//     if (snapshot.empty) {
-//       console.log('Enter the reviews to DB first');
-//       res.json({
-//         status: "No Content",
-//         statusCode: 204,
-//         message: "Collection Seems To Be Empty",
-//         data,
-//         error: null
-//     })
-//       return;
-//     } 
-    
-//     data = []
-//     console.log("Our Reviews Are:")
-//     snapshot.forEach(doc => {
-//     console.log(doc.id, '=>', doc.data());
-//     data.push({id: doc.id, uid: doc.data().userId, textReview: doc.data().textReview, imageReview: doc.data().imageReview, published: doc.data().createdAt})
-//     });
+              const data = {ratings: Number(ratings), textReview: String(textReview), imageReview: String(imageReview), createdAt: Date.now()};
+              
+              //userAddress: String(Address), userPincode: String(Pincode)
+              //posting data into userData collection
+              await db.collection('Users').doc(uid).collection("Reviews").doc(itemid).set(data);
+              let FieldValue = require('firebase-admin').firestore.FieldValue;
+              await db.collection('Category2').doc(itemid).update("reviews", FieldValue.arrayUnion(textReview));
 
-//     let resObj = {
-//       status: "success",
-//       statusCode: 200,
-//       message: "OK",
-//       data,
-//       error: null
-//   }
-//     res.json(resObj)
-        
-//     }
-      
-//     run().catch(console.error);
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
 
-// }; 
+          run().catch(console.error);
+
+}; 
 
 
 
 
-module.exports = {postSignup, getLogin}
-  //, getBannerOffers, getCategories, getItemList, postReview, getReview}
+module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, getItemListCat1, getItemListCat2}
 
 
 
