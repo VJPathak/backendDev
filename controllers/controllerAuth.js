@@ -10,7 +10,6 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-
 //demo param: http://localhost:3000/signup?uid=1111111111&name=Vashishth%20Pathak&email=pathakvashishth05@gmail.com&phno=12366666666&address=this%20is%20demo%20address&pincode=202013
 const postSignup = (req, res) => {
     
@@ -23,25 +22,47 @@ const postSignup = (req, res) => {
     let address = query.address;
     let pincode = query.pincode;
 
+
+    
     console.log(name, phno); 
 
             async function run() {
       
                 const data = {Address: String(address), Name: String(name), Email: String(email), Number: String(phno), Pincode: String(pincode), isActive: 1, createdAt: Date.now()};
                 
+                const loginData = db.collection('Users');
+                const snapshot = await loginData.where('Number', '==', phno).get()
+
+                if (snapshot.empty) {
+                  await db.collection('Users').doc(uid).set(data);
+                  let resObj = {
+                    status: "success",
+                    statusCode: 200,
+                    message: "OK",
+                    data,
+                    error: null
+
+                }
+                res.json(resObj)
+              }
+
+                else{
+                  let resObj = {
+                    status: "Failed",
+                    statusCode: 409,
+                    message: "Ph no. already registered",
+                    data,
+                    error: "Yes"
+
+                }
+
                 //userAddress: String(Address), userPincode: String(Pincode)
                 //posting data into userData collection
 
                 //await db.collection('Users').doc(uid).collection('h').doc().set(data);
-                await db.collection('Users').doc(uid).set(data);
-                let resObj = {
-                  status: "success",
-                  statusCode: 200,
-                  message: "OK",
-                  data,
-                  error: null
+                res.json(resObj)
               }
-              res.json(resObj)
+              
             }
 
             run().catch(console.error);
@@ -272,7 +293,7 @@ const getBannerOffers = (req, res) => {
 
 // }; 
 
-//demo param: http://localhost:3000/menswear?productDesc=sampleDescription&productName=tshirt&id=111&photos=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&price=3000&size=XXL&status=dispatched&deliveryDate=SomeDate&deliveryTime=SomeTime&productsLeft=10&vendorName=Vashishth
+//demo param: http://localhost:3000/menswear?productDesc=sampleDescription&productName=pant&id=222&photos=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&price=1200&size=XL&status=dispatched&deliveryDate=SomeDate&deliveryTime=SomeTime&productsLeft=40&vendorName=VJPathak
 const postItemListCat1 = (req, res) => {
 
     let query = require('url').parse(req.url,true).query;
@@ -406,10 +427,10 @@ const getItemListCat1 = (req, res) => {
       {
         id: doc.id, 
         productName: doc.data().productName,
-        productPrice: doc.data().price,
-        productSize: doc.data().size,
+        productPrice: doc.data().productPrice,
+        productSize: doc.data().productSize,
         productDescription: doc.data().productDesc,
-        productImages: doc.data().photos,
+        productImages: doc.data().productImages,
         productLeft: doc.data().productsLeft,
         status: doc.data().status,
         deliveryDate: doc.data().deliveryDate,
@@ -465,10 +486,10 @@ const getItemListCat2 = (req, res) => {
       {
         id: doc.id, 
         productName: doc.data().productName,
-        productPrice: doc.data().price,
-        productSize: doc.data().size,
+        productPrice: doc.data().productPrice,
+        productSize: doc.data().productSize,
         productDescription: doc.data().productDesc,
-        productImages: doc.data().photos,
+        productImages: doc.data().productImages,
         productLeft: doc.data().productsLeft,
         status: doc.data().status,
         deliveryDate: doc.data().deliveryDate,
@@ -494,113 +515,6 @@ const getItemListCat2 = (req, res) => {
     run().catch(console.error);
 
 }; 
-
-
-
-
-//http://www.localhost:3000/itemList
-// const getItemList = (req, res) => {
-
-  //to insert the data into itemList collection
-  /*const dataToInsert = [
-    {
-      productName: 'BULLMER',
-      productCategory: 'Mens Wear',
-      productPrice: 3000,
-      productSize: ['S', 'M', 'L', 'XL', 'XXL'],
-      productDescription: "Graphic Printed Round Neck Oversized Cotton T-shirt",
-      productImages: ['https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link',
-      'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link'],
-      productLeft: 10
-
-      //new modifications
-      vendorName:"Vashishth Pathak",
-
-    }
-  ];
-
-  async function insertData(data) {
-    try {
-      const writeBatch = db.batch();
-  
-      data.forEach(docData => {
-        const ref = db.collection('itemsList').doc(); // Generate unique IDs
-        writeBatch.set(ref, docData);
-      });
-  
-      await writeBatch.commit();
-      console.log('Data successfully inserted!');
-    } catch (error) {
-      console.error('Error inserting data:', error);
-    }
-  }
-
-  insertData(dataToInsert);*/
-
-//   async function run() {
-    
-//     const bannerOfferData = db.collection('itemsList');
-//     const snapshot = await bannerOfferData.get(); 
-    
-//     if (snapshot.empty) {
-//       console.log('Enter the Items List to DB first');
-//       res.json({
-//         status: "No Content",
-//         statusCode: 204,
-//         message: "Collection Seems To Be Empty",
-//         data,
-//         error: null
-//     })
-//       return;
-//     } 
-    
-//     let data = []
-//     console.log("Our Items List is:")
-//     snapshot.forEach(doc => {
-//     console.log(doc.id, '=>', doc.data());
-
-
-//     // viewData.push({data : doc.data()})
-
-//     data.push({
-//       productName: doc.data().productName,
-//       productCategory: doc.data().productCategory,
-//       productPrice: doc.data().productPrice,
-//       productSize: doc.data().productSize,
-//       productDescription: doc.data().productDescription,
-//       productImages: doc.data().productImages,
-//       productLeft: doc.data().productLeft
-
-//       //new modifications
-//       //vendorName:"Vashishth Pathak",
-
-//     })
-
-    
-//     });
-//     console.log(data)
-//     let resObj = {
-//       status: "success",
-//       statusCode: 200,
-//       message: "OK",
-//       data,
-//       error: null
-//   }
-//     res.json(resObj)
-//     // res.render("showData", {data : viewData});
-//     }
-      
-//     run().catch(console.error);
-
-// };
 
 
 //demo param: http://localhost:3000/userReview/menswear?ratings=5&rid=4444&itemid=111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
@@ -677,9 +591,127 @@ const postCat2Review = (req, res) => {
 }; 
 
 
+// http://localhost:3000/coupons?cid=7777775&itemid=4444&priceoff=100&tas=this%20is%20sample%20terms%20and%20conditions
+const postCoupon = (req, res) => {
+    
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let cid = query.cid;
+  let itemid = query.itemid;
+  let priceOff = query.priceoff;
+  let tc = query.tas;
+
+          async function run() {
+    
+              const data = {itemId: itemid, priceOff: priceOff, tc: tc, createdAt: Date.now()};
+              
+              //userAddress: String(Address), userPincode: String(Pincode)
+              //posting data into userData collection
+              await db.collection('Coupons').doc(cid).set(data);
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
+
+          run().catch(console.error);
+
+}; 
 
 
-module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, getItemListCat1, getItemListCat2}
+// http://localhost:3000/coupons
+const getCoupon = (req, res) => {
+    
+  async function run() {
+    
+    const couponData = db.collection('Coupons');
+    const snapshot = await couponData.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the Coupon Details into the Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+    
+    data = []
+    console.log("Items In Coupons Collection Are:")
+    snapshot.forEach(doc => {
+    console.log(doc.id, '=>', doc.data());
+    data.push(
+      {
+        id: doc.id, 
+        createdAt: doc.data().createdAt,
+        itemId: doc.data().itemId,
+        priceOff: doc.data().priceOff
+      })
+    });
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
+
+
+// const postAddToCart = (req, res) => {
+    
+//   //option-1
+//   let query = require('url').parse(req.url,true).query;
+
+//   let pid = query.cid;
+//   let productDesc = query.itemid;
+//   let priceOff = query.priceoff;
+//   let tc = query.tas;
+
+//           async function run() {
+    
+//               const data = {itemId: itemid, priceOff: priceOff, tc: tc, createdAt: Date.now()};
+              
+//               //userAddress: String(Address), userPincode: String(Pincode)
+//               //posting data into userData collection
+//               await db.collection('Coupons').doc(cid).set(data);
+
+//               let resObj = {
+//                 status: "success",
+//                 statusCode: 200,
+//                 message: "OK",
+//                 data,
+//                 error: null
+//             }
+//             res.json(resObj)
+//           }
+
+//           run().catch(console.error);
+
+// }; 
+
+
+
+
+
+module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, getItemListCat1, getItemListCat2, postCoupon, getCoupon}
 
 
 
