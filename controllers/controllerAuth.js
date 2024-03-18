@@ -214,85 +214,6 @@ const getBannerOffers = (req, res) => {
 }; 
 
 
-//demo URL: http://localhost:3000/categories
-// const getCategories = (req, res) => {
-    
-//   async function run() {
-    
-//     const categoriesData = db.collection('categories');
-//     const snapshot = await categoriesData.get(); 
-    
-//     if (snapshot.empty) {
-//       console.log('Enter the categories to DB first');
-//       res.json({
-//         status: "No Content",
-//         statusCode: 204,
-//         message: "Collection Seems To Be Empty",
-//         data,
-//         error: null
-//     })
-//       return;
-//     } 
-    
-//     let data = []
-//     console.log("Our Categories Are:")
-//     snapshot.forEach(doc => {
-//     console.log(doc.id, '=>', doc.data().type);
-
-//     data.push({
-//       type: doc.data().type
-//     })
-
-
-//     });
-
-//     let resObj = {
-//       status: "success",
-//       statusCode: 200,
-//       message: "OK",
-//       data,
-//       error: null
-//   }
-
-
-//     res.json(resObj)
-
-//     }
-//     // console.log(viewData) 
-    
-//     run().catch(console.error);
-
-
-  //incase we want-to insert data categories collection
-   /* const dataToInsert = [
-      {
-        type: 'Womens Wear'
-      },
-      {
-        type: 'WFH Casual Wear'
-      }
-    ];
-
-    async function insertData(data) {
-      try {
-        const writeBatch = db.batch();
-    
-        data.forEach(docData => {
-          const ref = db.collection('categories').doc(); // Generate unique IDs
-          writeBatch.set(ref, docData);
-        });
-    
-        await writeBatch.commit();
-        console.log('Data successfully inserted!');
-      } catch (error) {
-        console.error('Error inserting data:', error);
-      }
-    }
-
-    insertData(dataToInsert);*/
-
-// }; 
-
 //demo param: http://localhost:3000/menswear?productDesc=sampleDescription&productName=pant&id=222&photos=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&price=1200&size=XL&status=dispatched&deliveryDate=SomeDate&deliveryTime=SomeTime&productsLeft=40&vendorName=VJPathak
 const postItemListCat1 = (req, res) => {
 
@@ -674,44 +595,216 @@ const getCoupon = (req, res) => {
 
 }; 
 
-
-// const postAddToCart = (req, res) => {
+// http://localhost:3000/addtocart?uid=1111111111&category=Menswear&itemid=111&title=Tshirt&desc=Some%20Description&quantity=2&size=XXL&price=3000&discount=10&image=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
+const postAddToCart = (req, res) => {
     
-//   //option-1
-//   let query = require('url').parse(req.url,true).query;
+  //option-1
+  let query = require('url').parse(req.url,true).query;
 
-//   let pid = query.cid;
-//   let productDesc = query.itemid;
-//   let priceOff = query.priceoff;
-//   let tc = query.tas;
+  let uid = query.uid;
+  let productCategory = query.category;
+  let itemID = query.itemid;
+  let productTitle = query.title;
+  let productDesc = query.desc;
+  let productQuantity = query.quantity;
+  let productSize = query.size;
+  let productPrice = query.price;
+  let productImage = query.image;
+  let productDiscount = query.discount;
 
-//           async function run() {
+          async function run() {
     
-//               const data = {itemId: itemid, priceOff: priceOff, tc: tc, createdAt: Date.now()};
+              const data = {productTitle: productTitle, 
+                            Description: productDesc, 
+                            Units: Number(productQuantity), 
+                            Pictures: productImage,
+                            Price: Number(productPrice),
+                            Discount: Number(productDiscount),
+                            Size: productSize,   
+                            Category: productCategory, 
+                            outOfStock: false, 
+                            createdAt: Date.now()};
               
-//               //userAddress: String(Address), userPincode: String(Pincode)
-//               //posting data into userData collection
-//               await db.collection('Coupons').doc(cid).set(data);
+              //userAddress: String(Address), userPincode: String(Pincode)
+              //posting data into userData collection
+              await db.collection('Users').doc(uid).collection('Add to Cart').doc(itemID).set(data);
 
-//               let resObj = {
-//                 status: "success",
-//                 statusCode: 200,
-//                 message: "OK",
-//                 data,
-//                 error: null
-//             }
-//             res.json(resObj)
-//           }
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
 
-//           run().catch(console.error);
+          run().catch(console.error);
 
-// }; 
-
-
+}; 
 
 
+// http://localhost:3000/viewcart?uid=1111111111
+const getCartItems = (req, res) => {
+    
+  let query = require('url').parse(req.url,true).query;
+  let uid = query.uid;
 
-module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, getItemListCat1, getItemListCat2, postCoupon, getCoupon}
+  async function run() {
+    
+    const cartData = db.collection('Users').doc(uid).collection('Add to Cart');
+    const snapshot = await cartData.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the Cart Items into the Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+    
+    data = []
+    console.log(" Cart Items In Collection Are:")
+    snapshot.forEach(doc => {
+    console.log(doc.id, '=>', doc.data());
+    data.push(
+      {                     
+                            Category: doc.data().Category,
+                            productTitle: doc.data().productTitle, 
+                            Description: doc.data().Description, 
+                            Units: doc.data().Units, 
+                            Pictures: doc.data().Pictures,
+                            Price: doc.data().Price,
+                            Discount: doc.data().Discount,
+                            Size: doc.data().Size,   
+                            outOfStock: doc.data().outOfStock, 
+                            createdAt: doc.data().createdAt})
+    });
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
+
+// http://localhost:3000/addaddress?uid=1111111111&pincode=303012&address1=someAddress123&address2=anotherAddress456&state=Gujarat&city=gandhingar&latitude=334gjfggf&longitude=gcjhjdshgjhd 
+const postAddress = (req, res) => {
+    
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let uid = query.uid;
+  let pincode = query.pincode;
+  let Address1 = query.address1;
+  let Address2 = query.address2;
+  let State = query.state;
+  let City = query.city;
+  let Latitude = query.latitude;
+  let Longitude = query.longitude;
+
+          async function run() {
+    
+              const data = {Pincode: pincode, 
+                            Address1: Address1, 
+                            Address2: Address2, 
+                            State: State,
+                            City: City,
+                            Latitude: Latitude,
+                            Longitude: Longitude};
+              
+              //userAddress: String(Address), userPincode: String(Pincode)
+              //posting data into userData collection
+              await db.collection('Users').doc(uid).update(data);
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
+
+          run().catch(console.error);
+
+}; 
 
 
+// http://localhost:3000/getaddress?uid=1111111111
+const getAddress = (req, res) => {
+    
+  let query = require('url').parse(req.url,true).query;
+  let uid = query.uid;
+
+          async function run() {
+
+            const addressData = db.collection('Users').doc(uid);
+            const snapshot = await addressData.get(); 
+            
+            if (snapshot.empty) {
+              console.log('Enter the offers to DB first');
+              res.json({
+                status: "No Content",
+                statusCode: 204,
+                message: "Collection Seems To Be Empty",
+                data,
+                error: null
+            })
+              return;
+            } 
+            
+            data = {
+              Pincode: snapshot._fieldsProto.Pincode.stringValue, 
+              Address1: snapshot._fieldsProto.Address1.stringValue, 
+              Address2: snapshot._fieldsProto.Address2.stringValue, 
+              State: snapshot._fieldsProto.State.stringValue,
+              City: snapshot._fieldsProto.City.stringValue,
+              Latitude: snapshot._fieldsProto.Latitude.stringValue,
+              Longitude: snapshot._fieldsProto.Longitude.stringValue,
+              Name: snapshot._fieldsProto.Name.stringValue,
+              Number:snapshot._fieldsProto.Number.stringValue
+            }
+            console.log("Our Address Is:")
+
+            console.log(snapshot._fieldsProto.Email.stringValue)
+
+            let resObj = {
+              status: "success",
+              statusCode: 200,
+              message: "OK",
+              data,
+              error: null
+          }
+        
+        
+            res.json(resObj)
+                
+
+
+              }
+      
+          run().catch(console.error);
+
+}; 
+
+
+
+
+module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
+getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress}
 
