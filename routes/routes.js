@@ -9,6 +9,8 @@ let getItemListCat1 = controller.getItemListCat1;
 let getItemListCat2 = controller.getItemListCat2;
 let postCat1Review = controller.postCat1Review;
 let postCat2Review = controller.postCat2Review;
+let postCoupon = controller.postCoupon;
+let getCoupon = controller.getCoupon;
 
 const express = require("express");
 let router = express.Router();
@@ -43,6 +45,12 @@ router
   .route("/menswear")
   .get(getItemListCat1)
   .post(postItemListCat1);
+
+  router
+  .route("/coupons")
+  .get(getCoupon)
+  .post(postCoupon);
+  // .post(postItemListCat1);
 
   router
   .route("/womenswear")
