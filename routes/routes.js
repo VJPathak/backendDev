@@ -11,6 +11,10 @@ let postCat1Review = controller.postCat1Review;
 let postCat2Review = controller.postCat2Review;
 let postCoupon = controller.postCoupon;
 let getCoupon = controller.getCoupon;
+let postAddToCart = controller.postAddToCart;
+let getCartItems = controller.getCartItems;
+let postAddress = controller.postAddress;
+let getAddress = controller.getAddress;
 
 const express = require("express");
 let router = express.Router();
@@ -46,15 +50,31 @@ router
   .get(getItemListCat1)
   .post(postItemListCat1);
 
-  router
-  .route("/coupons")
-  .get(getCoupon)
-  .post(postCoupon);
-  // .post(postItemListCat1);
-
-  router
+router
   .route("/womenswear")
   .get(getItemListCat2)
   .post(postItemListCat2);
+
+router
+  .route("/coupons")
+  .get(getCoupon)
+  .post(postCoupon);
+
+router
+  .route("/addtocart")
+  .post(postAddToCart)
+
+
+router
+  .route("/viewcart")
+  .get(getCartItems)
+
+router
+  .route("/addaddress")
+  .post(postAddress)
+
+router
+  .route("/getaddress")
+  .get(getAddress)
 
   module.exports = router;
