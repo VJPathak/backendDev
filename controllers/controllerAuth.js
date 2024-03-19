@@ -10,6 +10,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
+
 //demo param: http://localhost:3000/signup?uid=1111111111&name=Vashishth%20Pathak&email=pathakvashishth05@gmail.com&phno=12366666666&address=this%20is%20demo%20address&pincode=202013
 const postSignup = (req, res) => {
     
@@ -340,11 +341,11 @@ const getItemListCat1 = (req, res) => {
       return;
     } 
     
-    data = []
+    data1 = []
     console.log("Items In Category-1(Menswear) Are:")
     snapshot.forEach(doc => {
     console.log(doc.id, '=>', doc.data());
-    data.push(
+    data1.push(
       {
         id: doc.id, 
         productName: doc.data().productName,
@@ -360,6 +361,12 @@ const getItemListCat1 = (req, res) => {
         isActive: doc.data().isActive
       })
     });
+data = []
+for(i=0;i<data1.length-2;i++){
+  data.push(data1[i])
+}
+console.log("data is:")
+console.log(data)
 
     let resObj = {
       status: "success",
@@ -369,7 +376,7 @@ const getItemListCat1 = (req, res) => {
       error: null
   }
 
-
+console.log(data.length + 1)
     res.json(resObj)
         
     }
@@ -399,11 +406,11 @@ const getItemListCat2 = (req, res) => {
       return;
     } 
     
-    data = []
+    data1 = []
     console.log("Items In Category-2(Womenswear) Are:")
     snapshot.forEach(doc => {
     console.log(doc.id, '=>', doc.data());
-    data.push(
+    data1.push(
       {
         id: doc.id, 
         productName: doc.data().productName,
@@ -420,6 +427,13 @@ const getItemListCat2 = (req, res) => {
       })
     });
 
+      data = []
+      for(i=0;i<data1.length-2;i++){
+        data.push(data1[i])
+      }
+      console.log("data is:")
+      console.log(data)
+      
     let resObj = {
       status: "success",
       statusCode: 200,
