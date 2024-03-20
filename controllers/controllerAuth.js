@@ -737,8 +737,8 @@ const postAddress = (req, res) => {
                             Address2: Address2, 
                             State: State,
                             City: City,
-                            Latitude: Latitude,
-                            Longitude: Longitude};
+                            Latitude: Number(Latitude),
+                            Longitude: Number(Longitude)};
               
               //userAddress: String(Address), userPincode: String(Pincode)
               //posting data into userData collection
