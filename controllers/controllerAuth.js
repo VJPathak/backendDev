@@ -8,6 +8,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
+const bucket = admin.storage().bucket();
 const db = admin.firestore();
 
 
@@ -433,7 +434,7 @@ const getItemListCat2 = (req, res) => {
       }
       console.log("data is:")
       console.log(data)
-      
+
     let resObj = {
       status: "success",
       statusCode: 200,
@@ -452,7 +453,23 @@ const getItemListCat2 = (req, res) => {
 }; 
 
 
-//demo param: http://localhost:3000/userReview/menswear?ratings=5&rid=4444&itemid=111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+// http://localhost:3000/userReview/menswear?username=Vashishth&ratings=4.9&rid=4444&itemid=111&uid=22231&textReview=I'm obsessed with this sweater! It's cozy without being bulky and the knit pattern adds a nice touch. Perfect for layering or wearing on its own.&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+// http://localhost:3000/userReview/menswear?username=Jignesh&ratings=4.5&rid=4444&itemid=222&uid=22231&textReview=A delightful read that whisked me away to another world; the characters were so vivid and the storyline kept me hooked till the very end!&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+// http://localhost:3000/userReview/menswear?username=Vashishth&ratings=3.5&rid=4444&itemid=333&uid=22231&textReview=This [clothing product] exceeded my expectations! The fabric is soft, the design is chic, and it's incredibly versatile. Couldn't be happier with my purchase!&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+// http://localhost:3000/userReview/menswear?username=Jignesh&ratings=2.5&rid=4444&itemid=444&uid=22231&textReview=Absolutely love the fit and feel of this shirt! It's incredibly comfortable and the fabric is so soft. Definitely a new favorite in my wardrobe!&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+// http://localhost:3000/userReview/menswear?username=Vashishth&ratings=1&rid=4444&itemid=555&uid=22231&textReview=I'm obsessed with this sweater! It's cozy without being bulky and the knit pattern adds a nice touch. Perfect for layering or wearing on its own.&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+
+
+// http://localhost:3000/userReview/menswear?username=Vashishth&ratings=4&rid=4444&itemid=111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+
+
+
 const postCat1Review = (req, res) => {
     
   //option-1
@@ -463,6 +480,7 @@ const postCat1Review = (req, res) => {
   let textReview = query.textReview;
   let imageReview = query.imageReview;
   let ratings = query.ratings;
+  let username = query.username;
 
           async function run() {
     
@@ -472,7 +490,36 @@ const postCat1Review = (req, res) => {
               //posting data into userData collection
               await db.collection('Users').doc(uid).collection("Reviews").doc(itemid).set(data);
               let FieldValue = require('firebase-admin').firestore.FieldValue;
-              await db.collection('Category1').doc(itemid).update("reviews", FieldValue.arrayUnion(textReview));
+              // await db.collection('Category1').doc(itemid).update("reviews", FieldValue.arrayUnion(textReview));
+
+
+              const docRef = db.collection('Category1').doc(itemid);
+
+              // Use a transaction to ensure data consistency
+              await db.runTransaction(async (transaction) => {
+                const doc = await transaction.get(docRef);
+                if (!doc.exists) {
+                  throw new Error('Document does not exist');
+                }
+            
+                // Get the existing array (similar to previous example)
+                let existingArray = doc.get("Reviews");
+                if (!existingArray) {
+                  existingArray = [];
+                }
+            
+                // Add the new element
+                existingArray.push({createdAt: Date.now(), createdBy: uid, textReview: textReview, ratings: ratings, image: imageReview, userName: username});
+            
+                // Update the document with the modified array
+                transaction.set(docRef, { ["Reviews"]: existingArray }, { merge: true });
+              });
+            
+              console.log('Element pushed to array successfully!');
+
+
+
+
 
               let resObj = {
                 status: "success",
@@ -489,7 +536,18 @@ const postCat1Review = (req, res) => {
 }; 
 
 
-//demo param: http://localhost:3000/userReview/womenswear?ratings=5&rid=4444&itemid=1111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+//demo param: http://localhost:3000/userReview/womenswear?username=Vashishth&ratings=3.5&rid=4444&itemid=1111&uid=22231&textReview=I'm obsessed with this sweater! It's cozy without being bulky and the knit pattern adds a nice touch. Perfect for layering or wearing on its own.&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+//demo param: http://localhost:3000/userReview/womenswear?username=Jignesh&ratings=4.5&rid=4444&itemid=2222&uid=22231&textReview=This skirt is a game-changer! The fit is flattering and the length is just right. Plus, the material doesn't wrinkle easily, making it ideal for traveling&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+//demo param: http://localhost:3000/userReview/womenswear?username=Vashishth&ratings=5.0&rid=4444&itemid=3333&uid=22231&textReview=These leggings are a dream! They're incredibly comfortable for workouts but stylish enough to wear for errands or lounging. Plus, they hold their shape wash after wash!&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+//demo param: http://localhost:3000/userReview/womenswear?username=Jignesh&ratings=3.5&rid=4444&itemid=4444&uid=22231&textReview=I'm in love with this jumpsuit! It's effortlessly chic and the adjustable waist tie gives it a tailored look. The fabric is also super soft against the skin.&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
+
+
+
+//demo param: http://localhost:3000/userReview/womenswear?username=Vashishth&ratings=4.5&rid=4444&itemid=1111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
 const postCat2Review = (req, res) => {
     
   //option-1
@@ -500,6 +558,7 @@ const postCat2Review = (req, res) => {
   let textReview = query.textReview;
   let imageReview = query.imageReview;
   let ratings = query.ratings;
+  let username = query.username;
 
           async function run() {
     
@@ -509,7 +568,35 @@ const postCat2Review = (req, res) => {
               //posting data into userData collection
               await db.collection('Users').doc(uid).collection("Reviews").doc(itemid).set(data);
               let FieldValue = require('firebase-admin').firestore.FieldValue;
-              await db.collection('Category2').doc(itemid).update("reviews", FieldValue.arrayUnion(textReview));
+              // await db.collection('Category2').doc(itemid).update("reviews", FieldValue.arrayUnion(textReview));
+
+            
+
+              const docRef = db.collection('Category2').doc(itemid);
+
+              // Use a transaction to ensure data consistency
+              await db.runTransaction(async (transaction) => {
+                const doc = await transaction.get(docRef);
+                if (!doc.exists) {
+                  throw new Error('Document does not exist');
+                }
+            
+                // Get the existing array (similar to previous example)
+                let existingArray = doc.get("Reviews");
+                if (!existingArray) {
+                  existingArray = [];
+                }
+            
+                // Add the new element
+                existingArray.push({createdAt: Date.now(), createdBy: uid, textReview: textReview, ratings: ratings, image: imageReview, userName: username});
+            
+                // Update the document with the modified array
+                transaction.set(docRef, { ["Reviews"]: existingArray }, { merge: true });
+              });
+            
+              console.log('Element pushed to array successfully!');
+
+
 
               let resObj = {
                 status: "success",
@@ -805,10 +892,7 @@ const getAddress = (req, res) => {
               error: null
           }
         
-        
             res.json(resObj)
-                
-
 
               }
       
@@ -817,8 +901,144 @@ const getAddress = (req, res) => {
 }; 
 
 
+// http://localhost:3000/sampleapi?imagepath="C:\Users\91728\OneDrive\Desktop\banner_what_is_coding_1639724390969.jpg"
+const postSampleAPI = (req, res) => {
+    
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let imageFile = query.imagepath;
+
+
+          async function run() {
+
+            // const filePath = 'images/user-uploads/my-image.jpg'
+    
+            const file = bucket.file('imagesss');
+
+
+
+            // Upload the image file
+            await file.save(imageFile);
+        
+            // Get the download URL for the uploaded image
+            const downloadURL = await file.getSignedUrl({
+              action: 'read',
+              expires: '03-09-2444' // Set a far-future expiration date
+            });
+        
+            // Add the download URL to a Firestore document (modify as needed)
+            const docRef = db.collection('images').doc('my-image');
+            await docRef.set({
+              url: downloadURL
+            });
+        
+            console.log('Image uploaded and URL stored successfully!');
+          }
+
+          run().catch(console.error);
+
+}; 
+
+
+// http://localhost:3000/cat1reviews?pid=111
+const getCat1Reviews = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let pid = query.pid;
+    
+  async function run() {
+    
+    const category1Data = db.collection('Category1').doc(pid);
+    const snapshot = await category1Data.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Category-1(Menswear) Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+
+    console.log("Reviews of Item In Category-1(Menswear) Are:")
+
+    data = snapshot. _fieldsProto.Reviews.arrayValue.values[0].mapValue;
+
+console.log("data is:")
+console.log(data)
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
+
+// http://localhost:3000/cat2reviews?pid=1111
+const getCat2Reviews = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let pid = query.pid;
+    
+  async function run() {
+    
+    const category1Data = db.collection('Category2').doc(pid);
+    const snapshot = await category1Data.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Category-2(Womenswear) Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+
+    console.log("Reviews of Item In Category-2(Womenswear) Are:")
+    
+    data = snapshot. _fieldsProto.Reviews.arrayValue.values[0].mapValue;
+
+console.log("data is:")
+console.log(data)
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
+
+
+
+
 
 
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
-getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress}
+getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, postSampleAPI, getCat1Reviews, getCat2Reviews}
+
 
