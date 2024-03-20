@@ -8,7 +8,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
-const bucket = admin.storage().bucket();
 const db = admin.firestore();
 
 
@@ -901,46 +900,6 @@ const getAddress = (req, res) => {
 }; 
 
 
-// http://localhost:3000/sampleapi?imagepath="C:\Users\91728\OneDrive\Desktop\banner_what_is_coding_1639724390969.jpg"
-const postSampleAPI = (req, res) => {
-    
-  //option-1
-  let query = require('url').parse(req.url,true).query;
-
-  let imageFile = query.imagepath;
-
-
-          async function run() {
-
-            // const filePath = 'images/user-uploads/my-image.jpg'
-    
-            const file = bucket.file('imagesss');
-
-
-
-            // Upload the image file
-            await file.save(imageFile);
-        
-            // Get the download URL for the uploaded image
-            const downloadURL = await file.getSignedUrl({
-              action: 'read',
-              expires: '03-09-2444' // Set a far-future expiration date
-            });
-        
-            // Add the download URL to a Firestore document (modify as needed)
-            const docRef = db.collection('images').doc('my-image');
-            await docRef.set({
-              url: downloadURL
-            });
-        
-            console.log('Image uploaded and URL stored successfully!');
-          }
-
-          run().catch(console.error);
-
-}; 
-
-
 // http://localhost:3000/cat1reviews?pid=111
 const getCat1Reviews = (req, res) => {
 
@@ -1039,6 +998,6 @@ console.log(data)
 
 
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
-getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, postSampleAPI, getCat1Reviews, getCat2Reviews}
+getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews}
 
 
