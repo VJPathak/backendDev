@@ -15,16 +15,13 @@ let postAddToCart = controller.postAddToCart;
 let getCartItems = controller.getCartItems;
 let postAddress = controller.postAddress;
 let getAddress = controller.getAddress;
-let postSampleAPI = controller.postSampleAPI;
+
 let getCat1Reviews = controller.getCat1Reviews;
 let getCat2Reviews = controller.getCat2Reviews;
 
 const express = require("express");
 let router = express.Router();
 
-router
-  .route("/sampleapi")
-  .get(postSampleAPI);
 
 router
   .route("/signup")
