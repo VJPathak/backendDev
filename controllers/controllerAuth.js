@@ -925,9 +925,17 @@ const getCat1Reviews = (req, res) => {
 
     console.log("Reviews of Item In Category-1(Menswear) Are:")
 
-    data = snapshot. _fieldsProto.Reviews.arrayValue.values[0].mapValue;
+    len = snapshot. _fieldsProto.Reviews.arrayValue.values.length;
+data = []
+    for(i=0;i<len;i++){
+    data1 = snapshot. _fieldsProto.Reviews.arrayValue.values[i].mapValue;
 
-console.log("data is:")
+    data.push({image: data1.fields.image.stringValue, createdAt: data1.fields.createdAt.integerValue, 
+      createdBy: data1.fields.createdBy.stringValue, ratings: data1.fields.ratings.stringValue, userName: data1.fields.userName.stringValue, 
+      textReview: data1.fields.textReview.stringValue})
+    }
+
+// console.log("data is:")
 console.log(data)
 
     let resObj = {
@@ -971,7 +979,16 @@ const getCat2Reviews = (req, res) => {
 
     console.log("Reviews of Item In Category-2(Womenswear) Are:")
     
-    data = snapshot. _fieldsProto.Reviews.arrayValue.values[0].mapValue;
+    len = snapshot. _fieldsProto.Reviews.arrayValue.values.length;
+data = []
+    for(i=0;i<len;i++){
+    data1 = snapshot. _fieldsProto.Reviews.arrayValue.values[i].mapValue;
+
+    data.push({image: data1.fields.image.stringValue, createdAt: data1.fields.createdAt.integerValue, 
+      createdBy: data1.fields.createdBy.stringValue, ratings: data1.fields.ratings.stringValue, userName: data1.fields.userName.stringValue, 
+      textReview: data1.fields.textReview.stringValue})
+    }
+
 
 console.log("data is:")
 console.log(data)
@@ -991,6 +1008,7 @@ console.log(data)
     run().catch(console.error);
 
 }; 
+
 
 
 
