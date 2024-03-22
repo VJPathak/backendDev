@@ -801,13 +801,14 @@ const getCartItems = (req, res) => {
 
 }; 
 
-// http://localhost:3000/addaddress?uid=1111111111&pincode=303012&address1=someAddress123&address2=anotherAddress456&state=Gujarat&city=gandhingar&latitude=334gjfggf&longitude=gcjhjdshgjhd 
+// http://localhost:3000/addaddress?uid=1111111111&type=home&pincode=303012&address1=someAddress123&address2=anotherAddress456&state=Gujarat&city=gandhingar&latitude=7897644345&longitude=345678765 
 const postAddress = (req, res) => {
     
   //option-1
   let query = require('url').parse(req.url,true).query;
 
   let uid = query.uid;
+  let type = query.type;
   let pincode = query.pincode;
   let Address1 = query.address1;
   let Address2 = query.address2;
@@ -826,9 +827,40 @@ const postAddress = (req, res) => {
                             Latitude: Number(Latitude),
                             Longitude: Number(Longitude)};
               
-              //userAddress: String(Address), userPincode: String(Pincode)
-              //posting data into userData collection
-              await db.collection('Users').doc(uid).update(data);
+              // //userAddress: String(Address), userPincode: String(Pincode)
+              // //posting data into userData collection
+              // await db.collection('Users').doc(uid).update(data);
+
+
+              const docRef = db.collection('Users').doc(uid);
+
+              // Use a transaction to ensure data consistency
+              await db.runTransaction(async (transaction) => {
+                const doc = await transaction.get(docRef);
+                if (!doc.exists) {
+                  throw new Error('Document does not exist');
+                }
+            
+                // Get the existing array (similar to previous example)
+                let existingArray = doc.get("Address");
+                if (!existingArray) {
+                  existingArray = [];
+                }
+            
+                // Add the new element
+                existingArray.push({createdAt: Date.now(), type: type, Pincode: Number(pincode), 
+                                Address1: Address1, 
+                                Address2: Address2, 
+                                State: State,
+                                City: City,
+                                Latitude: Number(Latitude),
+                                Longitude: Number(Longitude)});
+            
+                // Update the document with the modified array
+                transaction.set(docRef, { ["Address"]: existingArray }, { merge: true });
+              });
+            
+              console.log('Data pushed to array successfully!');
 
               let resObj = {
                 status: "success",
@@ -868,20 +900,47 @@ const getAddress = (req, res) => {
               return;
             } 
             
-            data = {
-              Pincode: snapshot._fieldsProto.Pincode.stringValue, 
-              Address1: snapshot._fieldsProto.Address1.stringValue, 
-              Address2: snapshot._fieldsProto.Address2.stringValue, 
-              State: snapshot._fieldsProto.State.stringValue,
-              City: snapshot._fieldsProto.City.stringValue,
-              Latitude: snapshot._fieldsProto.Latitude.stringValue,
-              Longitude: snapshot._fieldsProto.Longitude.stringValue,
-              Name: snapshot._fieldsProto.Name.stringValue,
-              Number:snapshot._fieldsProto.Number.stringValue
-            }
-            console.log("Our Address Is:")
+            // data = {
+            //   Pincode: snapshot._fieldsProto.Pincode.stringValue, 
+            //   Address1: snapshot._fieldsProto.Address1.stringValue, 
+            //   Address2: snapshot._fieldsProto.Address2.stringValue, 
+            //   State: snapshot._fieldsProto.State.stringValue,
+            //   City: snapshot._fieldsProto.City.stringValue,
+            //   Latitude: snapshot._fieldsProto.Latitude.stringValue,
+            //   Longitude: snapshot._fieldsProto.Longitude.stringValue,
+            //   Name: snapshot._fieldsProto.Name.stringValue,
+            //   Number:snapshot._fieldsProto.Number.stringValue
+            // }
+            // console.log("Our Address Is:")
 
-            console.log(snapshot._fieldsProto.Email.stringValue)
+            // console.log(snapshot._fieldsProto.Email.stringValue)
+
+
+
+            len = snapshot. _fieldsProto.Address.arrayValue.values.length;
+            data = []
+                for(i=0;i<len;i++){
+                data1 = snapshot. _fieldsProto.Address.arrayValue.values[i].mapValue;
+            
+                console.log(data1)
+
+                data.push({
+                  createdAt: data1.fields.createdAt.integerValue, 
+                  State: data1.fields.State.stringValue, 
+                  Address2: data1.fields.Address2.stringValue, 
+                  Latitude: data1.fields.Latitude.integerValue,
+                  Address1: data1.fields.Address1.stringValue,
+                  City: data1.fields.City.stringValue,
+                  type: data1.fields.type.stringValue,
+                  Longitude: data1.fields.Longitude.integerValue,
+                  Pincode: data1.fields.Pincode.integerValue
+                })
+                }
+            
+            // console.log("data is:")
+            console.log(data)
+
+
 
             let resObj = {
               status: "success",
@@ -898,7 +957,6 @@ const getAddress = (req, res) => {
           run().catch(console.error);
 
 }; 
-
 
 // http://localhost:3000/cat1reviews?pid=111
 const getCat1Reviews = (req, res) => {
@@ -1014,8 +1072,9 @@ console.log(data)
 
 
 
-
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
 getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews}
+
+
 
 
