@@ -612,20 +612,20 @@ const postCat2Review = (req, res) => {
 }; 
 
 
-// http://localhost:3000/coupons?cid=7777775&itemid=4444&priceoff=100&tas=this%20is%20sample%20terms%20and%20conditions
+// http://localhost:3000/coupons?cid=WELCOME150&percent=0&priceoff=150&tas=get Rs 150 off
 const postCoupon = (req, res) => {
     
   //option-1
   let query = require('url').parse(req.url,true).query;
 
   let cid = query.cid;
-  let itemid = query.itemid;
+  let percent = query.percent;
   let priceOff = query.priceoff;
   let tc = query.tas;
 
           async function run() {
     
-              const data = {itemId: itemid, priceOff: priceOff, tc: tc, createdAt: Date.now()};
+              const data = {percent: Number(percent), priceOff: Number(priceOff), tc: tc, createdAt: Date.now()};
               
               //userAddress: String(Address), userPincode: String(Pincode)
               //posting data into userData collection
@@ -674,8 +674,9 @@ const getCoupon = (req, res) => {
       {
         id: doc.id, 
         createdAt: doc.data().createdAt,
-        itemId: doc.data().itemId,
-        priceOff: doc.data().priceOff
+        percent: doc.data().itemId,
+        priceOff: doc.data().priceOff,
+        tc: doc.data().tc
       })
     });
 
@@ -1074,6 +1075,8 @@ console.log(data)
 
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
 getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews}
+
+
 
 
 
