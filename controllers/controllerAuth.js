@@ -674,7 +674,7 @@ const getCoupon = (req, res) => {
       {
         id: doc.id, 
         createdAt: doc.data().createdAt,
-        percent: doc.data().itemId,
+        percent: doc.data().percent,
         priceOff: doc.data().priceOff,
         tc: doc.data().tc
       })
