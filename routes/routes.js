@@ -1,5 +1,6 @@
 const controller = require('../controllers/controllerAuth');
 
+// User Controllers
 let postSignup = controller.postSignup;
 let getLogin = controller.getLogin;
 let getBannerOffers = controller.getBannerOffers;
@@ -15,14 +16,23 @@ let postAddToCart = controller.postAddToCart;
 let getCartItems = controller.getCartItems;
 let postAddress = controller.postAddress;
 let getAddress = controller.getAddress;
-
 let getCat1Reviews = controller.getCat1Reviews;
 let getCat2Reviews = controller.getCat2Reviews;
+
+// Vendor Controllers
+let postVendorUpdate = controller.postVendorUpdate;
+let postAddToCategory1 = controller.postAddToCategory1;
+let postVendorSignup = controller.postVendorSignup;
+let getVendorLogin = controller.getVendorLogin;
+let postAddToCategory2 = controller.postAddToCategory2;
+let getMenswearItems = controller.getMenswearItems;
+let getWomenswearItems = controller.getWomenswearItems;
 
 const express = require("express");
 let router = express.Router();
 
 
+// users
 router
   .route("/signup")
   .get((req, res) => {
@@ -89,4 +99,33 @@ router
   .route("/cat2reviews")
   .get(getCat2Reviews);
 
-  module.exports = router;
+// vendors
+router
+  .route("/vendorSignup")
+  .post(postVendorSignup);
+
+router
+  .route("/vendorLogin")
+  .get(getVendorLogin);
+
+router
+  .route("/vendorUpdateData")
+  .post(postVendorUpdate);
+
+router
+  .route("/addtomenswear")
+  .post(postAddToCategory1);
+
+router
+  .route("/addtowomenswear")
+  .post(postAddToCategory2);
+
+router
+  .route("/vendoritems/menswear")
+  .get(getMenswearItems);
+
+router
+  .route("/vendoritems/womenswear")
+  .get(getWomenswearItems);
+
+module.exports = router;
