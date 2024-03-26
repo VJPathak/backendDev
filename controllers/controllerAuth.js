@@ -57,10 +57,6 @@ const postSignup = (req, res) => {
 
                 }
 
-                //userAddress: String(Address), userPincode: String(Pincode)
-                //posting data into userData collection
-
-                //await db.collection('Users').doc(uid).collection('h').doc().set(data);
                 res.json(resObj)
               }
               
@@ -107,9 +103,7 @@ const getLogin = (req, res) => {
                   req.session.userId = id;
                   req.session.save();
                 });
-                
-                // res.json(viewData)
-                
+
 
                 let resObj = {
                   status: "success",
@@ -123,10 +117,6 @@ const getLogin = (req, res) => {
                 }
         
             run().catch(console.error);
-    // }
-    // else{
-    //     console.log("Phno should be of 10 digits")
-    // }
 
 }; 
 
@@ -135,46 +125,6 @@ const getLogin = (req, res) => {
 const getBannerOffers = (req, res) => {
     
   async function run() {
-
-    // const dataToInsert = [
-    //   {
-    //     imageURL: 'https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link'
-    //   },
-    //   {
-    //     imageURL: 'https://drive.google.com/file/d/1JJdBTXKSMZmeySjv6YSFFSlF1biR4bq0/view?usp=drive_link'
-    //   },
-    //   {
-    //     imageURL: 'https://drive.google.com/file/d/1oJ7TMruCgbhOHGOwWyQ4HKSUTD-v2iag/view?usp=drive_link'
-    //   },
-    //   {
-    //     imageURL: 'https://drive.google.com/file/d/1j2DI1pzeiQWUhsf-DgJFlH3HvNgCdQwj/view?usp=drive_link'
-    //   },
-    //   {
-    //     imageURL: 'https://drive.google.com/file/d/11nrnKJd7jCtc0NMFaddZdlp1rcuWxUXR/view?usp=drive_link'
-    //   },
-    //   {
-    //     imageURL: 'https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link'
-    //   }
-    // ];
-
-    // async function insertData(data) {
-    //   try {
-    //     const writeBatch = db.batch();
-    
-    //     data.forEach(docData => {
-    //       const ref = db.collection('Banner Offers').doc(); // Generate unique IDs
-    //       writeBatch.set(ref, docData);
-    //     });
-    
-    //     await writeBatch.commit();
-    //     console.log('Data successfully inserted!');
-    //   } catch (error) {
-    //     console.error('Error inserting data:', error);
-    //   }
-    // }
-
-    // insertData(dataToInsert);
-    
     const bannerOfferData = db.collection('Banner Offers');
     const snapshot = await bannerOfferData.get(); 
     
@@ -442,33 +392,15 @@ const getItemListCat2 = (req, res) => {
       error: null
   }
 
-
     res.json(resObj)
         
-    }
-      
+    } 
     run().catch(console.error);
 
 }; 
 
 
-// http://localhost:3000/userReview/menswear?username=Vashishth&ratings=4.9&rid=4444&itemid=111&uid=22231&textReview=I'm obsessed with this sweater! It's cozy without being bulky and the knit pattern adds a nice touch. Perfect for layering or wearing on its own.&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-// http://localhost:3000/userReview/menswear?username=Jignesh&ratings=4.5&rid=4444&itemid=222&uid=22231&textReview=A delightful read that whisked me away to another world; the characters were so vivid and the storyline kept me hooked till the very end!&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-// http://localhost:3000/userReview/menswear?username=Vashishth&ratings=3.5&rid=4444&itemid=333&uid=22231&textReview=This [clothing product] exceeded my expectations! The fabric is soft, the design is chic, and it's incredibly versatile. Couldn't be happier with my purchase!&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-// http://localhost:3000/userReview/menswear?username=Jignesh&ratings=2.5&rid=4444&itemid=444&uid=22231&textReview=Absolutely love the fit and feel of this shirt! It's incredibly comfortable and the fabric is so soft. Definitely a new favorite in my wardrobe!&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-// http://localhost:3000/userReview/menswear?username=Vashishth&ratings=1&rid=4444&itemid=555&uid=22231&textReview=I'm obsessed with this sweater! It's cozy without being bulky and the knit pattern adds a nice touch. Perfect for layering or wearing on its own.&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-
-
 // http://localhost:3000/userReview/menswear?username=Vashishth&ratings=4&rid=4444&itemid=111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-
-
-
 const postCat1Review = (req, res) => {
     
   //option-1
@@ -516,10 +448,6 @@ const postCat1Review = (req, res) => {
             
               console.log('Element pushed to array successfully!');
 
-
-
-
-
               let resObj = {
                 status: "success",
                 statusCode: 200,
@@ -533,17 +461,6 @@ const postCat1Review = (req, res) => {
           run().catch(console.error);
 
 }; 
-
-
-
-//demo param: http://localhost:3000/userReview/womenswear?username=Vashishth&ratings=3.5&rid=4444&itemid=1111&uid=22231&textReview=I'm obsessed with this sweater! It's cozy without being bulky and the knit pattern adds a nice touch. Perfect for layering or wearing on its own.&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-//demo param: http://localhost:3000/userReview/womenswear?username=Jignesh&ratings=4.5&rid=4444&itemid=2222&uid=22231&textReview=This skirt is a game-changer! The fit is flattering and the length is just right. Plus, the material doesn't wrinkle easily, making it ideal for traveling&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-//demo param: http://localhost:3000/userReview/womenswear?username=Vashishth&ratings=5.0&rid=4444&itemid=3333&uid=22231&textReview=These leggings are a dream! They're incredibly comfortable for workouts but stylish enough to wear for errands or lounging. Plus, they hold their shape wash after wash!&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
-//demo param: http://localhost:3000/userReview/womenswear?username=Jignesh&ratings=3.5&rid=4444&itemid=4444&uid=22231&textReview=I'm in love with this jumpsuit! It's effortlessly chic and the adjustable waist tie gives it a tailored look. The fabric is also super soft against the skin.&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
-
 
 
 //demo param: http://localhost:3000/userReview/womenswear?username=Vashishth&ratings=4.5&rid=4444&itemid=1111&uid=1111111111&textReview=extraordinaly%20product&imageReview=https://drive.google.com/file/d/1QjeEhlJb7nX0iQUIEAGBKZNTjq1P9I2I/view?usp=drive_link
@@ -626,9 +543,7 @@ const postCoupon = (req, res) => {
           async function run() {
     
               const data = {percent: Number(percent), priceOff: Number(priceOff), tc: tc, createdAt: Date.now()};
-              
-              //userAddress: String(Address), userPincode: String(Pincode)
-              //posting data into userData collection
+
               await db.collection('Coupons').doc(cid).set(data);
 
               let resObj = {
@@ -726,8 +641,6 @@ const postAddToCart = (req, res) => {
                             outOfStock: false, 
                             createdAt: Date.now()};
               
-              //userAddress: String(Address), userPincode: String(Pincode)
-              //posting data into userData collection
               await db.collection('Users').doc(uid).collection('Add to Cart').doc(itemID).set(data);
 
               let resObj = {
@@ -827,11 +740,6 @@ const postAddress = (req, res) => {
                             City: City,
                             Latitude: Number(Latitude),
                             Longitude: Number(Longitude)};
-              
-              // //userAddress: String(Address), userPincode: String(Pincode)
-              // //posting data into userData collection
-              // await db.collection('Users').doc(uid).update(data);
-
 
               const docRef = db.collection('Users').doc(uid);
 
@@ -900,23 +808,6 @@ const getAddress = (req, res) => {
             })
               return;
             } 
-            
-            // data = {
-            //   Pincode: snapshot._fieldsProto.Pincode.stringValue, 
-            //   Address1: snapshot._fieldsProto.Address1.stringValue, 
-            //   Address2: snapshot._fieldsProto.Address2.stringValue, 
-            //   State: snapshot._fieldsProto.State.stringValue,
-            //   City: snapshot._fieldsProto.City.stringValue,
-            //   Latitude: snapshot._fieldsProto.Latitude.stringValue,
-            //   Longitude: snapshot._fieldsProto.Longitude.stringValue,
-            //   Name: snapshot._fieldsProto.Name.stringValue,
-            //   Number:snapshot._fieldsProto.Number.stringValue
-            // }
-            // console.log("Our Address Is:")
-
-            // console.log(snapshot._fieldsProto.Email.stringValue)
-
-
 
             len = snapshot. _fieldsProto.Address.arrayValue.values.length;
             data = []
@@ -1069,15 +960,413 @@ console.log(data)
 }; 
 
 
+//demo param: http://localhost:3000/vendorSignup?vid=12345&phno=9191919191&vendorName=Vashishth%20Pathak&gstno=ab1245dgfhf&regno=4567dcbhd7&address=this%20is%20demo%20address&longitude=202013.1&latitude=465445.1
+const postVendorSignup = (req, res) => {
+
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let vid = query.vid;
+  let vendorName = query.vendorName;
+  let phno = query.phno;
+  let gstno = query.gstno;
+  let regno = query.regno;
+  let address = query.address;
+  let latitude = query.latitude;
+  let longitude = query.longitude;
+
+  let location = {latitude: Number(latitude), longitude: Number(longitude)}
+
+          async function run() {
+    
+              const data = {address: String(address), phno: Number(phno), vendorName: String(vendorName), gstNo: String(gstno), regNo: String(regno), location: location, isActive: 1, onBoarding: Date.now()};
+              let data1 = { phno, vendorName};
+
+              const vendorData = db.collection("Vendor's List");
+              const snapshot = await vendorData.where('phno', '==', Number(phno)).get()
+
+              if (snapshot.empty) {
+                await db.collection("Vendor's List").doc(vid).set(data);
+                await db.collection("Vendor's Names").doc("Vendors").update(vid,data1);
+
+                let resObj = {
+                  status: "success",
+                  statusCode: 200,
+                  message: "OK",
+                  data,
+                  error: null
+
+              }
+              res.json(resObj)
+            }
+
+              else{
+                let resObj = {
+                  status: "Failed",
+                  statusCode: 409,
+                  message: "Ph no. already registered",
+                  data,
+                  error: "Yes"
+
+              }
+
+              res.json(resObj)
+            }
+            
+          }
+
+          run().catch(console.error);
+
+}; 
 
 
+//demo param: http://localhost:3000/vendorLogin?phno=9191919191
+const getVendorLogin = (req, res) => {
+    
+  let query = require('url').parse(req.url,true).query;
+  let phno = query.phno;
+
+  console.log(phno); 
+
+          async function run() {
+    
+              const loginData = db.collection("Vendor's List");
+              const snapshot = await loginData.where('phno', '==', Number(phno)).get();
+              if (snapshot.empty) {
+                console.log('Please Enter Valid Phno');
+                res.json({
+                  status: "Unauthorized",
+                  statusCode: 401,
+                  message: "Credentials Should be Correct",
+                  error: "Yes"
+              })
+                return;
+              }  
+              
+              data = []
+
+              snapshot.forEach(doc => {
+                console.log(doc.id, '=>', doc.data());
+                let id = doc.id
+                data.push({
+                  vid: id,
+                  phno: doc.data().phno,
+                  address: doc.data().address,
+                  gstNo: doc.data().gstNo,
+                  regNo: doc.data().regNo,
+                  location: doc.data().location,
+                  vendorName: doc.data().vendorName
+                })
+
+              });
+
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+             
+              }
+      
+          run().catch(console.error);
+
+}; 
+
+
+//demo param: http://localhost:3000/vendorUpdateData?vid=12345&phno=9191919100&vendorName=VJ%20Pathak&address=this%20is%20demo%20address&longitude=202013.1&latitude=465445.1
+const postVendorUpdate = (req, res) => {
+
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let vid = query.vid;
+  let vendorName = query.vendorName;
+  let phno = query.phno;
+  let address = query.address;
+  let latitude = query.latitude;
+  let longitude = query.longitude;
+
+  let location = {latitude: Number(latitude), longitude: Number(longitude)}
+
+          async function run() {
+    
+              const data = {address: String(address), phno: Number(phno), vendorName: String(vendorName), location: location};
+
+                await db.collection("Vendor's List").doc(vid).update({vendorName: vendorName, phno: Number(phno), location: location, address: address});
+                await db.collection("Vendor's Names").doc("Vendors").update(vid,{vendorName: vendorName, phno: Number(phno)});
+
+                let resObj = {
+                  status: "success",
+                  statusCode: 200,
+                  message: "OK",
+                  data,
+                  error: null
+
+              }
+              
+              res.json(resObj)
+          
+          }
+
+          run().catch(console.error);
+
+}; 
+
+
+// http://localhost:3000/addtomenswear?vid=12345&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&size={"XL":10,"XXL":13, "XXL": 5}&images=["https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link"]
+const postAddToCategory1= (req, res) => {
+
+  const url = require('url');
+
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let vid = query.vid;
+  let category = query.category;
+  let subcat = query.subcategory;
+  let itemid = query.itemid;
+  let desc = query.desc;
+  // let size = query.size;
+  let price = query.price;
+  let type = query.type;
+
+  const parsedUrlImage = url.parse(req.url,true);
+  const images = JSON.parse(parsedUrlImage.query.images);
+  console.log(images); 
+
+  const parsedUrlSizes = url.parse(req.url,true);
+  const size = JSON.parse(parsedUrlSizes.query.size);
+  console.log(size); 
+
+          async function run() {
+    
+              const data = {Category: category, 
+                            subCategory: subcat,
+                            Description: desc, 
+                            Type:type,
+                            Images: images,
+                            Price: Number(price),
+                            Size: size,   
+                            Category: category, 
+                            outOfStock: false, 
+                            lockinPeriod: 15,
+                            lockinStart: Date.now()};
+              
+              await db.collection("Vendor's List").doc(vid).collection("Menswear").doc(itemid).set(data);
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
+
+          run().catch(console.error);
+
+}; 
+
+
+
+// http://localhost:3000/addtowomenswear?vid=12345&itemid=111&category=Womenswear&subcategory=kurtis&type=Shirt&price=2500&desc=Some%20Description&size={"XL":10,"XXL":13, "XXL": 5}&images=["https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link"]
+const postAddToCategory2= (req, res) => {
+
+  const url = require('url');
+
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let vid = query.vid;
+  let category = query.category;
+  let subcat = query.subcategory;
+  let itemid = query.itemid;
+  let desc = query.desc;
+  // let size = query.size;
+  let price = query.price;
+  let type = query.type;
+
+  const parsedUrlImage = url.parse(req.url,true);
+  const images = JSON.parse(parsedUrlImage.query.images);
+  console.log(images); 
+
+  const parsedUrlSizes = url.parse(req.url,true);
+  const size = JSON.parse(parsedUrlSizes.query.size);
+  console.log(size); 
+
+          async function run() {
+    
+              const data = {Category: category, 
+                            subCategory: subcat,
+                            Description: desc, 
+                            Type:type,
+                            Images: images,
+                            Price: Number(price),
+                            Size: size,   
+                            Category: category, 
+                            outOfStock: false, 
+                            lockinPeriod: 15,
+                            lockinStart: Date.now()};
+              
+              await db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(itemid).set(data);
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+            res.json(resObj)
+          }
+
+          run().catch(console.error);
+
+}; 
+
+
+
+// http://localhost:3000/vendoritems/menswear?vid=12345
+const getMenswearItems = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let vid = query.vid;
+    
+  async function run() {
+    
+    const category1Data = db.collection("Vendor's List").doc(vid).collection("Menswear");
+    const snapshot = await category1Data.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Category-1(Menswear) Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+
+    console.log("Item In Category-1(Menswear) Are:")
+    
+    data = []
+
+                snapshot.forEach(doc => {
+                  console.log(doc.id, '=>', doc.data());
+                  let id = doc.id
+                  data.push({
+                    vid: id,
+                    Category: doc.data().Category,
+                    Description: doc.data().Description,
+                    Images: doc.data().Images,
+                    Price: doc.data().Price,
+                    Size: doc.data().Size,
+                    Type: doc.data().Type,
+                    lockinPeriod: doc.data().lockinPeriod,
+                    outOfStock: doc.data().outOfStock,
+                    subCategory: doc.data().subCategory
+                  })
+
+                });
+
+
+
+console.log("data is:")
+console.log(data)
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
+
+
+
+// http://localhost:3000/vendoritems/womenswear?vid=12345
+const getWomenswearItems = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let vid = query.vid;
+    
+  async function run() {
+    
+    const category1Data = db.collection("Vendor's List").doc(vid).collection("Womenswear");
+    const snapshot = await category1Data.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Category-2(Womenswear) Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "Collection Seems To Be Empty",
+        data,
+        error: null
+    })
+      return;
+    } 
+
+    console.log("Item In Category-2(Womenswear) Are:")
+    
+    data = []
+
+                snapshot.forEach(doc => {
+                  console.log(doc.id, '=>', doc.data());
+                  let id = doc.id
+                  data.push({
+                    vid: id,
+                    Category: doc.data().Category,
+                    Description: doc.data().Description,
+                    Images: doc.data().Images,
+                    Price: doc.data().Price,
+                    Size: doc.data().Size,
+                    Type: doc.data().Type,
+                    lockinPeriod: doc.data().lockinPeriod,
+                    outOfStock: doc.data().outOfStock,
+                    subCategory: doc.data().subCategory
+                  })
+
+                });
+
+
+
+console.log("data is:")
+console.log(data)
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+
+    res.json(resObj)
+        
+    }
+      
+    run().catch(console.error);
+
+}; 
 
 
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
-getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews}
-
-
-
-
-
+getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, 
+postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, getMenswearItems, getWomenswearItems}
 
