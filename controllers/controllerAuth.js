@@ -1118,9 +1118,12 @@ const postVendorUpdate = (req, res) => {
 
 
 // http://localhost:3000/addtomenswear?vid=12345&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&size={"XL":10,"XXL":13, "XXL": 5}&images=["https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link"]
+
+// http://localhost:3000/addtomenswear?vid=835948&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
+
 const postAddToCategory1= (req, res) => {
 
-  const url = require('url');
+  // const url = require('url');
 
   //option-1
   let query = require('url').parse(req.url,true).query;
@@ -1134,13 +1137,31 @@ const postAddToCategory1= (req, res) => {
   let price = query.price;
   let type = query.type;
 
-  const parsedUrlImage = url.parse(req.url,true);
-  const images = JSON.parse(parsedUrlImage.query.images);
-  console.log(images); 
+  // const parsedUrlImage = url.parse(req.url,true);
+  // const images = JSON.parse(parsedUrlImage.query.images);
+  // console.log(images); 
+  let image1 = query.image1;
+  let image2 = query.image2;
+  let image3 = query.image3;
+  let image4 = query.image4;
 
-  const parsedUrlSizes = url.parse(req.url,true);
-  const size = JSON.parse(parsedUrlSizes.query.size);
-  console.log(size); 
+  let images = []
+  images[0] = image1;
+  images[1] = image2;
+  images[2] = image3;
+  images[3] = image4;
+
+  // const parsedUrlSizes = url.parse(req.url,true);
+  // const size = JSON.parse(parsedUrlSizes.query.size);
+  // console.log(size); 
+
+  let sizes = {
+    S: Number(query.sSize),
+    M: Number(query.mSize),
+    L: Number(query.lSize),
+    XL: Number(query.xlSize),
+    XXL: Number(query.xxlSize)
+  }
 
           async function run() {
     
@@ -1150,7 +1171,7 @@ const postAddToCategory1= (req, res) => {
                             Type:type,
                             Images: images,
                             Price: Number(price),
-                            Size: size,   
+                            Size: sizes,   
                             Category: category, 
                             outOfStock: false, 
                             lockinPeriod: 15,
@@ -1174,10 +1195,8 @@ const postAddToCategory1= (req, res) => {
 
 
 
-// http://localhost:3000/addtowomenswear?vid=12345&itemid=111&category=Womenswear&subcategory=kurtis&type=Shirt&price=2500&desc=Some%20Description&size={"XL":10,"XXL":13, "XXL": 5}&images=["https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link"]
+// http://localhost:3000/addtowomenswear?vid=835948&itemid=111&category=Womenswear&subcategory=kurtis&type=Shirt&price=2500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
 const postAddToCategory2= (req, res) => {
-
-  const url = require('url');
 
   //option-1
   let query = require('url').parse(req.url,true).query;
@@ -1191,13 +1210,32 @@ const postAddToCategory2= (req, res) => {
   let price = query.price;
   let type = query.type;
 
-  const parsedUrlImage = url.parse(req.url,true);
-  const images = JSON.parse(parsedUrlImage.query.images);
-  console.log(images); 
+  // const parsedUrlImage = url.parse(req.url,true);
+  // const images = JSON.parse(parsedUrlImage.query.images);
+  // console.log(images); 
 
-  const parsedUrlSizes = url.parse(req.url,true);
-  const size = JSON.parse(parsedUrlSizes.query.size);
-  console.log(size); 
+  let image1 = query.image1;
+  let image2 = query.image2;
+  let image3 = query.image3;
+  let image4 = query.image4;
+
+  let images = []
+  images[0] = image1;
+  images[1] = image2;
+  images[2] = image3;
+  images[3] = image4;
+
+  // const parsedUrlSizes = url.parse(req.url,true);
+  // const size = JSON.parse(parsedUrlSizes.query.size);
+  // console.log(size); 
+
+  let sizes = {
+    S: Number(query.sSize),
+    M: Number(query.mSize),
+    L: Number(query.lSize),
+    XL: Number(query.xlSize),
+    XXL: Number(query.xxlSize)
+  }
 
           async function run() {
     
@@ -1207,7 +1245,7 @@ const postAddToCategory2= (req, res) => {
                             Type:type,
                             Images: images,
                             Price: Number(price),
-                            Size: size,   
+                            Size: sizes,   
                             Category: category, 
                             outOfStock: false, 
                             lockinPeriod: 15,
@@ -1231,7 +1269,7 @@ const postAddToCategory2= (req, res) => {
 
 
 
-// http://localhost:3000/vendoritems/menswear?vid=12345
+// http://localhost:3000/vendoritems/menswear?vid=835948
 const getMenswearItems = (req, res) => {
 
   let query = require('url').parse(req.url,true).query;
