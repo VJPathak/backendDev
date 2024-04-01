@@ -1121,6 +1121,8 @@ const postVendorUpdate = (req, res) => {
 
 // http://localhost:3000/addtomenswear?vid=835948&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
 
+
+// https://backendinit.onrender.com/addtomenswear?vid=835948&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
 const postAddToCategory1= (req, res) => {
 
   // const url = require('url');
@@ -1168,7 +1170,7 @@ const postAddToCategory1= (req, res) => {
               const data = {Category: category, 
                             subCategory: subcat,
                             Description: desc, 
-                            Type:type,
+                            Name:type,
                             Images: images,
                             Price: Number(price),
                             Size: sizes,   
@@ -1196,6 +1198,8 @@ const postAddToCategory1= (req, res) => {
 
 
 // http://localhost:3000/addtowomenswear?vid=835948&itemid=111&category=Womenswear&subcategory=kurtis&type=Shirt&price=2500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
+// https://backendinit.onrender.com/addtowomenswear?vid=835948&itemid=111&category=Womenswear&subcategory=kurtis&type=Shirt&price=2500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
+
 const postAddToCategory2= (req, res) => {
 
   //option-1
@@ -1242,7 +1246,7 @@ const postAddToCategory2= (req, res) => {
               const data = {Category: category, 
                             subCategory: subcat,
                             Description: desc, 
-                            Type:type,
+                            Name:type,
                             Images: images,
                             Price: Number(price),
                             Size: sizes,   
@@ -1306,7 +1310,7 @@ const getMenswearItems = (req, res) => {
                     Images: doc.data().Images,
                     Price: doc.data().Price,
                     Size: doc.data().Size,
-                    Type: doc.data().Type,
+                    Type: doc.data().Name,
                     lockinPeriod: doc.data().lockinPeriod,
                     outOfStock: doc.data().outOfStock,
                     subCategory: doc.data().subCategory
@@ -1374,7 +1378,7 @@ const getWomenswearItems = (req, res) => {
                     Images: doc.data().Images,
                     Price: doc.data().Price,
                     Size: doc.data().Size,
-                    Type: doc.data().Type,
+                    Type: doc.data().Name,
                     lockinPeriod: doc.data().lockinPeriod,
                     outOfStock: doc.data().outOfStock,
                     subCategory: doc.data().subCategory
