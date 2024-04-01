@@ -1300,7 +1300,7 @@ const getMenswearItems = (req, res) => {
                   console.log(doc.id, '=>', doc.data());
                   let id = doc.id
                   data.push({
-                    vid: id,
+                    itemID: id,
                     Category: doc.data().Category,
                     Description: doc.data().Description,
                     Images: doc.data().Images,
@@ -1368,7 +1368,7 @@ const getWomenswearItems = (req, res) => {
                   console.log(doc.id, '=>', doc.data());
                   let id = doc.id
                   data.push({
-                    vid: id,
+                    itemID: id,
                     Category: doc.data().Category,
                     Description: doc.data().Description,
                     Images: doc.data().Images,
