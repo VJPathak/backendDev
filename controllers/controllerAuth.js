@@ -1310,7 +1310,7 @@ const getMenswearItems = (req, res) => {
                     Images: doc.data().Images,
                     Price: doc.data().Price,
                     Size: doc.data().Size,
-                    Type: doc.data().Name,
+                    Name: doc.data().Name,
                     lockinPeriod: doc.data().lockinPeriod,
                     outOfStock: doc.data().outOfStock,
                     subCategory: doc.data().subCategory
@@ -1378,7 +1378,7 @@ const getWomenswearItems = (req, res) => {
                     Images: doc.data().Images,
                     Price: doc.data().Price,
                     Size: doc.data().Size,
-                    Type: doc.data().Name,
+                    Name: doc.data().Name,
                     lockinPeriod: doc.data().lockinPeriod,
                     outOfStock: doc.data().outOfStock,
                     subCategory: doc.data().subCategory
