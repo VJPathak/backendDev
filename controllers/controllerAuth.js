@@ -980,7 +980,7 @@ const postVendorSignup = (req, res) => {
           async function run() {
     
               const data = {address: String(address), phno: Number(phno), vendorName: String(vendorName), gstNo: String(gstno), regNo: String(regno), location: location, isActive: 1, onBoarding: Date.now()};
-              let data1 = { phno, vendorName};
+              let data1 = { phno, vendorName, location};
 
               const vendorData = db.collection("Vendor's List");
               const snapshot = await vendorData.where('phno', '==', Number(phno)).get()
@@ -988,6 +988,7 @@ const postVendorSignup = (req, res) => {
               if (snapshot.empty) {
                 await db.collection("Vendor's List").doc(vid).set(data);
                 await db.collection("Vendor's Names").doc("Vendors").update(vid,data1);
+                await db.collection("Vendor's Names").doc("Geolocations").update(vid,{'Location':data1.location});
 
                 let resObj = {
                   status: "success",
@@ -1037,7 +1038,7 @@ const getVendorLogin = (req, res) => {
                 res.json({
                   status: "Unauthorized",
                   statusCode: 401,
-                  message: "Credentials Should be Correct",
+                  message: "No data found",
                   error: "Yes"
               })
                 return;
@@ -1097,7 +1098,8 @@ const postVendorUpdate = (req, res) => {
               const data = {address: String(address), phno: Number(phno), vendorName: String(vendorName), location: location};
 
                 await db.collection("Vendor's List").doc(vid).update({vendorName: vendorName, phno: Number(phno), location: location, address: address});
-                await db.collection("Vendor's Names").doc("Vendors").update(vid,{vendorName: vendorName, phno: Number(phno)});
+                await db.collection("Vendor's Names").doc("Vendors").update(vid,{vendorName: vendorName, phno: Number(phno), location: location});
+                await db.collection("Vendor's Names").doc("Geolocations").update(vid,{location: location});
 
                 let resObj = {
                   status: "success",
@@ -1117,17 +1119,14 @@ const postVendorUpdate = (req, res) => {
 }; 
 
 
-// http://localhost:3000/addtomenswear?vid=12345&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&size={"XL":10,"XXL":13, "XXL": 5}&images=["https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link"]
+// http://localhost:3000/addtomenswear?vid=12345&itemid=11&category=Menswear&subcategory=Shirts&type=Tshirt&price=1000&desc=Some%20Description&size={"XL":10,"XXL":13, "XXL": 5}&images=["https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link"]
 
-// http://localhost:3000/addtomenswear?vid=835948&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
+// http://localhost:3000/addtomenswear?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
 
 
 // https://backendinit.onrender.com/addtomenswear?vid=835948&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
 const postAddToCategory1= (req, res) => {
 
-  // const url = require('url');
-
-  //option-1
   let query = require('url').parse(req.url,true).query;
 
   let vid = query.vid;
@@ -1137,7 +1136,7 @@ const postAddToCategory1= (req, res) => {
   let desc = query.desc;
   // let size = query.size;
   let price = query.price;
-  let type = query.type;
+  let name = query.name;
 
   // const parsedUrlImage = url.parse(req.url,true);
   // const images = JSON.parse(parsedUrlImage.query.images);
@@ -1170,7 +1169,7 @@ const postAddToCategory1= (req, res) => {
               const data = {Category: category, 
                             subCategory: subcat,
                             Description: desc, 
-                            Name:type,
+                            Name:name,
                             Images: images,
                             Price: Number(price),
                             Size: sizes,   
@@ -1178,8 +1177,66 @@ const postAddToCategory1= (req, res) => {
                             outOfStock: false, 
                             lockinPeriod: 15,
                             lockinStart: Date.now()};
+
+              const data1 = {
+                            vid: vid,
+                            Category: category, 
+                            subCategory: subcat,
+                            Description: desc, 
+                            Name:name,
+                            Images: images,
+                            Price: Number(price),
+                            Size: sizes,   
+                            Category: category, 
+                            outOfStock: false, 
+                            lockinPeriod: 15,
+                            lockinStart: Date.now()};
+
+              const vendorItemData = db.collection("Vendor's List").doc(vid).collection("Menswear").doc(subcat);
+              const snapshot = await vendorItemData.get()
+            
+              if (snapshot._fieldsProto == null) {
+                console.log(snapshot._fieldsProto);
+                console.log('no such db');
+                await db.collection("Vendor's List").doc(vid).collection("Menswear").doc(subcat).set({[itemid]: data});
+                let articles = []
+                articles[0] = itemid
+                await db.collection("Vendor's List").doc(vid).collection("Menswear").doc(subcat).update({articles : articles});
+                
+              }
+              else{
+                console.log(snapshot._fieldsProto);
+                console.log("Db has data");
+                await db.collection("Vendor's List").doc(vid).collection("Menswear").doc(subcat).update(itemid,data);
+                const docRef = db.collection("Vendor's List").doc(vid).collection("Menswear").doc(subcat);
+
+                // Use a transaction to ensure data consistency
+                await db.runTransaction(async (transaction) => {
+                  const doc = await transaction.get(docRef);
+                  if (!doc.exists) {
+                    throw new Error('Document does not exist');
+                  }
               
-              await db.collection("Vendor's List").doc(vid).collection("Menswear").doc(itemid).set(data);
+                  // Get the existing array (similar to previous example)
+                  let existingArray = doc.get("articles");
+                  if (!existingArray) {
+                    existingArray = [];
+                  }
+              
+                  // Add the new element
+                  existingArray.push(itemid);
+              
+                  // Update the document with the modified array
+                  transaction.set(docRef, { ["articles"]: existingArray }, { merge: true });
+                });
+              
+                
+                console.log('Element pushed to array successfully!');
+  
+              }
+
+              await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).set(data);
+              await db.collection(subcat).doc(itemid).set(data1);
 
               let resObj = {
                 status: "success",
@@ -1197,7 +1254,7 @@ const postAddToCategory1= (req, res) => {
 
 
 
-// http://localhost:3000/addtowomenswear?vid=835948&itemid=111&category=Womenswear&subcategory=kurtis&type=Shirt&price=2500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
+// http://localhost:3000/addtowomenswear?vid=835948&itemid=1111&category=Womenswear&subcategory=Sarees&name=Silk Saree&price=2500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
 // https://backendinit.onrender.com/addtowomenswear?vid=835948&itemid=111&category=Womenswear&subcategory=kurtis&type=Shirt&price=2500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
 
 const postAddToCategory2= (req, res) => {
@@ -1212,7 +1269,7 @@ const postAddToCategory2= (req, res) => {
   let desc = query.desc;
   // let size = query.size;
   let price = query.price;
-  let type = query.type;
+  let name = query.name;
 
   // const parsedUrlImage = url.parse(req.url,true);
   // const images = JSON.parse(parsedUrlImage.query.images);
@@ -1241,37 +1298,223 @@ const postAddToCategory2= (req, res) => {
     XXL: Number(query.xxlSize)
   }
 
-          async function run() {
+  async function run() {
     
-              const data = {Category: category, 
-                            subCategory: subcat,
-                            Description: desc, 
-                            Name:type,
-                            Images: images,
-                            Price: Number(price),
-                            Size: sizes,   
-                            Category: category, 
-                            outOfStock: false, 
-                            lockinPeriod: 15,
-                            lockinStart: Date.now()};
-              
-              await db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(itemid).set(data);
+    const data = {Category: category, 
+                  subCategory: subcat,
+                  Description: desc, 
+                  Name:name,
+                  Images: images,
+                  Price: Number(price),
+                  Size: sizes,   
+                  Category: category, 
+                  outOfStock: false, 
+                  lockinPeriod: 15,
+                  lockinStart: Date.now()};
 
-              let resObj = {
-                status: "success",
-                statusCode: 200,
-                message: "OK",
-                data,
-                error: null
-            }
-            res.json(resObj)
-          }
+    const data1 = {
+                  vid: vid,
+                  Category: category, 
+                  subCategory: subcat,
+                  Description: desc, 
+                  Name:name,
+                  Images: images,
+                  Price: Number(price),
+                  Size: sizes,   
+                  Category: category, 
+                  outOfStock: false, 
+                  lockinPeriod: 15,
+                  lockinStart: Date.now()};
+
+    const vendorItemData = db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(subcat);
+    const snapshot = await vendorItemData.get()
+  
+    if (snapshot._fieldsProto == null) {
+      console.log(snapshot._fieldsProto);
+      console.log('no such db');
+      await db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(subcat).set({[itemid]: data});
+      let articles = []
+      articles[0] = itemid
+      await db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(subcat).update({articles : articles});
+      
+    }
+    else{
+      console.log(snapshot._fieldsProto);
+      console.log("Db has data");
+      await db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(subcat).update(itemid,data);
+      const docRef = db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(subcat);
+
+      // Use a transaction to ensure data consistency
+      await db.runTransaction(async (transaction) => {
+        const doc = await transaction.get(docRef);
+        if (!doc.exists) {
+          throw new Error('Document does not exist');
+        }
+    
+        // Get the existing array (similar to previous example)
+        let existingArray = doc.get("articles");
+        if (!existingArray) {
+          existingArray = [];
+        }
+    
+        // Add the new element
+        existingArray.push(itemid);
+    
+        // Update the document with the modified array
+        transaction.set(docRef, { ["articles"]: existingArray }, { merge: true });
+      });
+    
+      
+      console.log('Element pushed to array successfully!');
+
+    }
+
+    await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).set(data);
+    await db.collection(subcat).doc(itemid).set(data1);
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+  res.json(resObj)
+}
 
           run().catch(console.error);
 
 }; 
 
+// http://localhost:3000/addtokidswear?vid=835948&itemid=11&category=Kidswear&subcategory=Boy&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
 
+const postAddToCategory3= (req, res) => {
+
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let vid = query.vid;
+  let category = query.category;
+  let subcat = query.subcategory;
+  let itemid = query.itemid;
+  let desc = query.desc;
+  // let size = query.size;
+  let price = query.price;
+  let name = query.name;
+
+  // const parsedUrlImage = url.parse(req.url,true);
+  // const images = JSON.parse(parsedUrlImage.query.images);
+  // console.log(images); 
+
+  let image1 = query.image1;
+  let image2 = query.image2;
+  let image3 = query.image3;
+  let image4 = query.image4;
+
+  let images = []
+  images[0] = image1;
+  images[1] = image2;
+  images[2] = image3;
+  images[3] = image4;
+
+  // const parsedUrlSizes = url.parse(req.url,true);
+  // const size = JSON.parse(parsedUrlSizes.query.size);
+  // console.log(size); 
+
+  let sizes = {
+    S: Number(query.sSize),
+    M: Number(query.mSize),
+    L: Number(query.lSize),
+    XL: Number(query.xlSize),
+    XXL: Number(query.xxlSize)
+  }
+
+  async function run() {
+    
+    const data = {Category: category, 
+                  subCategory: subcat,
+                  Description: desc, 
+                  Name:name,
+                  Images: images,
+                  Price: Number(price),
+                  Size: sizes,   
+                  Category: category, 
+                  outOfStock: false, 
+                  lockinPeriod: 15,
+                  lockinStart: Date.now()};
+
+    const data1 = {
+                  vid: vid,
+                  Category: category, 
+                  subCategory: subcat,
+                  Description: desc, 
+                  Name:name,
+                  Images: images,
+                  Price: Number(price),
+                  Size: sizes,   
+                  Category: category, 
+                  outOfStock: false, 
+                  lockinPeriod: 15,
+                  lockinStart: Date.now()};
+
+    const vendorItemData = db.collection("Vendor's List").doc(vid).collection("Kidswear").doc(subcat);
+    const snapshot = await vendorItemData.get()
+  
+    if (snapshot._fieldsProto == null) {
+      console.log(snapshot._fieldsProto);
+      console.log('no such db');
+      await db.collection("Vendor's List").doc(vid).collection("Kidswear").doc(subcat).set({[itemid]: data});
+      let articles = []
+      articles[0] = itemid
+      await db.collection("Vendor's List").doc(vid).collection("Kidswear").doc(subcat).update({articles : articles});
+      
+    }
+    else{
+      console.log(snapshot._fieldsProto);
+      console.log("Db has data");
+      await db.collection("Vendor's List").doc(vid).collection("Kidswear").doc(subcat).update(itemid,data);
+      const docRef = db.collection("Vendor's List").doc(vid).collection("Kidswear").doc(subcat);
+
+      // Use a transaction to ensure data consistency
+      await db.runTransaction(async (transaction) => {
+        const doc = await transaction.get(docRef);
+        if (!doc.exists) {
+          throw new Error('Document does not exist');
+        }
+    
+        // Get the existing array (similar to previous example)
+        let existingArray = doc.get("articles");
+        if (!existingArray) {
+          existingArray = [];
+        }
+    
+        // Add the new element
+        existingArray.push(itemid);
+    
+        // Update the document with the modified array
+        transaction.set(docRef, { ["articles"]: existingArray }, { merge: true });
+      });
+    
+      console.log('Element pushed to array successfully!');
+
+    }
+
+    await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).set(data);
+    await db.collection(subcat).doc(itemid).set(data1);
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+  res.json(resObj)
+}
+
+  run().catch(console.error);
+
+}; 
 
 
 // http://localhost:3000/vendoritems/menswear?vid=835948
@@ -1290,7 +1533,7 @@ const getMenswearItems = (req, res) => {
       res.json({
         status: "No Content",
         statusCode: 204,
-        message: "Cannot find this ID",
+        message: "No data found",
         // data,
         error: "Yes"
     })
@@ -1343,7 +1586,6 @@ console.log(data)
 }; 
 
 
-
 // http://localhost:3000/vendoritems/womenswear?vid=12345
 const getWomenswearItems = (req, res) => {
 
@@ -1360,7 +1602,7 @@ const getWomenswearItems = (req, res) => {
       res.json({
         status: "No Content",
         statusCode: 204,
-        message: "Cannot find this ID",
+        message: "No data found",
         // data,
         error: "Yes"
     })
@@ -1412,7 +1654,122 @@ console.log(data)
 }; 
 
 
+// http://localhost:3000/pendingorders?vid=6CLUs5RxjtXL6WSrowewiFmmoVJ2
+const getPendingOrders = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let vid = query.vid;
+    
+  async function run() {
+    
+    const pendingOrderData = db.collection("Vendor's List").doc(vid).collection("Pending Orders");
+    const snapshot = await pendingOrderData.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "No data found",
+        error: null
+    })
+      return;
+    } 
+
+
+    data = []
+
+                snapshot.forEach(doc => {
+                  console.log(doc.id, '=>', doc.data());
+                  let id = doc.id
+                  data.push({
+                    uid: id,
+                    itemDetail: doc.data().itemDetail,
+                    orderDateTime: doc.data().orderDate
+                  })
+                });
+
+          console.log("data is:")
+          console.log(data)
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+
+              res.json(resObj)
+                  
+              }
+                
+              run().catch(console.error);
+
+}; 
+
+
+// http://localhost:3000/completedorders?vid=6CLUs5RxjtXL6WSrowewiFmmoVJ2
+const getCompletedOrders = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let vid = query.vid;
+    
+  async function run() {
+    
+    const pendingOrderData = db.collection("Vendor's List").doc(vid).collection("Completed Orders");
+    const snapshot = await pendingOrderData.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "No data found",
+        error: null
+    })
+      return;
+    } 
+
+
+    data = []
+
+                snapshot.forEach(doc => {
+                  console.log(doc.id, '=>', doc.data());
+                  let id = doc.id
+                  data.push({
+                    uid: id,
+                    itemDetail: doc.data().itemDetail,
+                    orderDateTime: doc.data().orderDate
+                  })
+                });
+
+          console.log("data is:")
+          console.log(data)
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+
+              res.json(resObj)
+                  
+              }
+                
+              run().catch(console.error);
+
+}; 
+
+
+
+
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
 getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, 
-postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, getMenswearItems, getWomenswearItems}
+postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, postAddToCategory3, getMenswearItems, getWomenswearItems,
+getPendingOrders, getCompletedOrders}
+
+
 
