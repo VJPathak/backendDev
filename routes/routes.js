@@ -27,6 +27,9 @@ let getVendorLogin = controller.getVendorLogin;
 let postAddToCategory2 = controller.postAddToCategory2;
 let getMenswearItems = controller.getMenswearItems;
 let getWomenswearItems = controller.getWomenswearItems;
+let postAddToCategory3 = controller.postAddToCategory3;
+let getPendingOrders = controller.getPendingOrders;
+let getCompletedOrders = controller.getCompletedOrders;
 
 const express = require("express");
 let router = express.Router();
@@ -121,11 +124,23 @@ router
   .post(postAddToCategory2);
 
 router
+  .route("/addtokidswear")
+  .post(postAddToCategory3);
+
+router
   .route("/vendoritems/menswear")
   .get(getMenswearItems);
 
 router
   .route("/vendoritems/womenswear")
   .get(getWomenswearItems);
+
+router
+  .route("/pendingorders")
+  .get(getPendingOrders);
+
+router
+  .route("/completedorders")
+  .get(getCompletedOrders);
 
 module.exports = router;
