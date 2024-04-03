@@ -1273,6 +1273,7 @@ const postAddToCategory2= (req, res) => {
 
 
 
+
 // http://localhost:3000/vendoritems/menswear?vid=835948
 const getMenswearItems = (req, res) => {
 
@@ -1289,13 +1290,14 @@ const getMenswearItems = (req, res) => {
       res.json({
         status: "No Content",
         statusCode: 204,
-        message: "Collection Seems To Be Empty",
-        data,
-        error: null
+        message: "Cannot find this ID",
+        // data,
+        error: "Yes"
     })
-      return;
+      // return;
     } 
 
+else{
     console.log("Item In Category-1(Menswear) Are:")
     
     data = []
@@ -1334,6 +1336,7 @@ console.log(data)
     res.json(resObj)
         
     }
+  }
       
     run().catch(console.error);
 
@@ -1357,13 +1360,13 @@ const getWomenswearItems = (req, res) => {
       res.json({
         status: "No Content",
         statusCode: 204,
-        message: "Collection Seems To Be Empty",
-        data,
-        error: null
+        message: "Cannot find this ID",
+        // data,
+        error: "Yes"
     })
-      return;
+      // return;
     } 
-
+else{
     console.log("Item In Category-2(Womenswear) Are:")
     
     data = []
@@ -1401,6 +1404,7 @@ console.log(data)
 
     res.json(resObj)
         
+    }
     }
       
     run().catch(console.error);
