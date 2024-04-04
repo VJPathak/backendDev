@@ -30,6 +30,8 @@ let getWomenswearItems = controller.getWomenswearItems;
 let postAddToCategory3 = controller.postAddToCategory3;
 let getPendingOrders = controller.getPendingOrders;
 let getCompletedOrders = controller.getCompletedOrders;
+let getVendorCatalogue = controller.getVendorCatalogue;
+// let postDeleteItem = controller.postDeleteItem;
 
 const express = require("express");
 let router = express.Router();
@@ -142,5 +144,13 @@ router
 router
   .route("/completedorders")
   .get(getCompletedOrders);
+
+router
+  .route("/catalogue")
+  .get(getVendorCatalogue);
+
+// router
+//   .route("/deleteitem")
+//   .get(postDeleteItem);
 
 module.exports = router;
