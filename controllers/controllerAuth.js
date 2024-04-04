@@ -1763,13 +1763,130 @@ const getCompletedOrders = (req, res) => {
 
 }; 
 
+// http://localhost:3000/catalogue?vid=835948
+const getVendorCatalogue = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let vid = query.vid;
+    
+  async function run() {
+    
+    const catalogueData = db.collection("Vendor's List").doc(vid).collection("Catalogue");
+    const snapshot = await catalogueData.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "No data found",
+        error: null
+    })
+      return;
+    } 
+
+
+    data = []
+
+                snapshot.forEach(doc => {
+                  console.log(doc.id, '=>', doc.data());
+                  let id = doc.id
+                  data.push({
+                    id: id,
+                    category: doc.data().Category,
+                    description: doc.data().Description,
+                    images: doc.data().Images,
+                    name: doc.data().Name,
+                    price: doc.data().Price,
+                    size: doc.data().Size,
+                    lockinPeriod: doc.data().lockinPeriod,
+                    lockinStart: doc.data().lockinStart,
+                    outOfStock: doc.data().outOfStock,
+                    subCategory: doc.data().subCategory
+                  })
+                });
+
+          console.log("data is:")
+          console.log(data)
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+
+              res.json(resObj)
+                  
+              }
+                
+              run().catch(console.error);
+
+}; 
+
+
+
+
+// http://localhost:3000/deleteitem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts
+
+// https://backendinit.onrender.com/addtokidswear?vid=835948&itemid=5567&category=Kidswear&subcategory=Boy&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
+
+
+// const postDeleteItem = (req, res) => {
+
+//   let query = require('url').parse(req.url,true).query;
+//   let vid = query.vid;
+//   let itemid = query.itemid;
+//   let category = query.category;
+//   let subcat = query.subcategory;
+
+//   async function run() {
+
+//     // const geolib = require('geolib');
+
+//     // const distance = geolib.getDistance(
+//     //   { latitude: 26.8475148, longitude: 75.8273443 },
+//     //   { latitude: 26.8565941, longitude: 75.8241318 }
+//     // );
+    
+//     // console.log("Distance to endpoint:", distance / 1000, "km");
+    
+//     const data = {outOfStock: true};
+
+//     const itemData = db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid);
+//     const snapshot = await itemData.get(); 
+//     console.log(snapshot._fieldsProto)
+
+//     //await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).update(itemid[outOfStock], outOfStock);
+//     let resObj = {
+//       status: "success",
+//       statusCode: 200,
+//       message: "OK",
+//       data,
+//       error: null
+//   }
+//   res.json(resObj)
+// }
+
+//   run().catch(console.error);
+
+// }; 
+
+
+
+
+
+
 
 
 
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
 getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, 
 postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, postAddToCategory3, getMenswearItems, getWomenswearItems,
-getPendingOrders, getCompletedOrders}
+getPendingOrders, getCompletedOrders, getVendorCatalogue}
+
+
 
 
 
