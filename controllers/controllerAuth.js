@@ -1833,45 +1833,162 @@ const getVendorCatalogue = (req, res) => {
 // https://backendinit.onrender.com/addtokidswear?vid=835948&itemid=5567&category=Kidswear&subcategory=Boy&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
 
 
-// const postDeleteItem = (req, res) => {
+const postDeleteItem = (req, res) => {
 
-//   let query = require('url').parse(req.url,true).query;
-//   let vid = query.vid;
-//   let itemid = query.itemid;
-//   let category = query.category;
-//   let subcat = query.subcategory;
+  let query = require('url').parse(req.url,true).query;
+  let vid = query.vid;
+  let itemid = query.itemid;
+  let category = query.category;
+  let subcat = query.subcategory;
 
-//   async function run() {
+  async function run() {
 
-//     // const geolib = require('geolib');
+    // const geolib = require('geolib');
 
-//     // const distance = geolib.getDistance(
-//     //   { latitude: 26.8475148, longitude: 75.8273443 },
-//     //   { latitude: 26.8565941, longitude: 75.8241318 }
-//     // );
+    // const distance = geolib.getDistance(
+    //   { latitude: 26.8475148, longitude: 75.8273443 },
+    //   { latitude: 26.8565941, longitude: 75.8241318 }
+    // );
     
-//     // console.log("Distance to endpoint:", distance / 1000, "km");
+    // console.log("Distance to endpoint:", distance / 1000, "km");
     
-//     const data = {outOfStock: true};
+    // const data = {outOfStock: true};
 
-//     const itemData = db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid);
-//     const snapshot = await itemData.get(); 
-//     console.log(snapshot._fieldsProto)
+    const itemData = db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid);
+    const snapshot = await itemData.get(); 
+    console.log(snapshot._fieldsProto)
 
-//     //await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).update(itemid[outOfStock], outOfStock);
-//     let resObj = {
-//       status: "success",
-//       statusCode: 200,
-//       message: "OK",
-//       data,
-//       error: null
-//   }
-//   res.json(resObj)
-// }
+    if (snapshot._fieldsProto == null) {
+      console.log('Enter the items into Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "No data found",
+        error: null
+    })
+      return;
+    } 
 
-//   run().catch(console.error);
 
-// }; 
+    await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({[itemid]: {outOfStock:true}}, { merge: true });
+    await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update({"outOfStock":true});
+    await db.collection(subcat).doc(itemid).update({"outOfStock":true});
+    
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data,
+      error: null
+  }
+  res.json(resObj)
+}
+
+  run().catch(console.error);
+
+}; 
+
+
+
+// http://localhost:3000/edititem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
+
+// vid, cat, subcat, vendorId
+
+const postEditItem = (req, res) => {
+
+  //option-1
+  let query = require('url').parse(req.url,true).query;
+
+  let vid = query.vid;
+  let category = query.category;
+  let subcat = query.subcategory;
+  let itemid = query.itemid;
+  let desc = query.desc;
+  let price = query.price;
+  let name = query.name; 
+
+  let image1 = query.image1;
+  let image2 = query.image2;
+  let image3 = query.image3;
+  let image4 = query.image4;
+
+  let images = []
+  images[0] = image1;
+  images[1] = image2;
+  images[2] = image3;
+  images[3] = image4;
+
+  let sizes = {
+    S: Number(query.sSize),
+    M: Number(query.mSize),
+    L: Number(query.lSize),
+    XL: Number(query.xlSize),
+    XXL: Number(query.xxlSize)
+  }
+
+  async function run() {
+    
+    const data = {Category: category, 
+                  subCategory: subcat,
+                  Description: desc, 
+                  Name:name,
+                  Images: images,
+                  Price: Number(price),
+                  Size: sizes,   
+                  Category: category, 
+                  outOfStock: false, 
+                  lockinPeriod: 15,
+                  lockinStart: Date.now()};
+
+    const data1 = {
+                  vid: vid,
+                  Category: category, 
+                  subCategory: subcat,
+                  Description: desc, 
+                  Name:name,
+                  Images: images,
+                  Price: Number(price),
+                  Size: sizes,   
+                  Category: category, 
+                  outOfStock: false, 
+                  lockinPeriod: 15,
+                  lockinStart: Date.now()};
+
+    const itemData = db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid);
+    const snapshot = await itemData.get(); 
+    console.log(snapshot._fieldsProto)
+              
+    if (snapshot._fieldsProto == null) {
+      console.log('Enter the items into Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "No data found",
+        error: null
+      })
+      return;
+    } 
+
+
+    await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({[itemid]: data}, { merge: true });
+    await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update(data);
+    await db.collection(subcat).doc(itemid).update(data1);
+
+}
+
+  run().catch(console.error);
+
+}; 
+
+
+
+module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
+getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, 
+postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, postAddToCategory3, getMenswearItems, getWomenswearItems,
+getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem}
+
+
+
 
 
 
