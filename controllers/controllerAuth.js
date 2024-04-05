@@ -1903,7 +1903,6 @@ const postDeleteItem = (req, res) => {
       status: "success",
       statusCode: 200,
       message: "OK",
-      data,
       error: null
   }
   res.json(resObj)
