@@ -1921,7 +1921,7 @@ const postDeleteItem = (req, res) => {
 
 
 
-// http://localhost:3000/edititem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
+// http://localhost:3000/edititem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description1&sSize=5&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
 
 // vid, cat, subcat, vendorId
 
@@ -1959,7 +1959,7 @@ const postEditItem = (req, res) => {
 
   async function run() {
     
-    const data = {Category: category, 
+    const data1 = {Category: category, 
                   subCategory: subcat,
                   Description: desc, 
                   Name:name,
@@ -1971,7 +1971,7 @@ const postEditItem = (req, res) => {
                   lockinPeriod: 15,
                   lockinStart: Date.now()};
 
-    const data1 = {
+    const data = {
                   vid: vid,
                   Category: category, 
                   subCategory: subcat,
@@ -2001,15 +2001,15 @@ const postEditItem = (req, res) => {
     } 
 
 
-    await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({[itemid]: data}, { merge: true });
-    await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update(data);
-    await db.collection(subcat).doc(itemid).update(data1);
+    await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({[itemid]: data1}, { merge: true });
+    await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update(data1);
+    await db.collection(subcat).doc(itemid).update(data);
 
     let resObj = {
       status: "success",
       statusCode: 200,
       message: "OK",
-      data1,
+      data,
       error: null
   }
   res.json(resObj)
@@ -2026,4 +2026,6 @@ module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat
 getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, 
 postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, postAddToCategory3, getMenswearItems, getWomenswearItems,
 getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem}
+
+
 
