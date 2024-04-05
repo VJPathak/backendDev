@@ -1895,9 +1895,9 @@ const postDeleteItem = (req, res) => {
     //   return;
     // } 
 
-    await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({[itemid]: {"outOfStock":true}}, { merge: true });
+    //await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({[itemid]: {"outOfStock":true}}, { merge: true });
     await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update({"outOfStock":true});
-    await db.collection(subcat).doc(itemid).update("outOfStock",true);
+    await db.collection(subcat).doc(itemid).update({"outOfStock":true});
     
     let resObj = {
       status: "success",
