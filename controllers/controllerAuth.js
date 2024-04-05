@@ -1837,7 +1837,6 @@ const getVendorCatalogue = (req, res) => {
 
 
 
-
 // http://localhost:3000/deleteitem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts
 
 // https://backendinit.onrender.com/addtokidswear?vid=835948&itemid=5567&category=Kidswear&subcategory=Boy&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
@@ -1868,6 +1867,12 @@ const postDeleteItem = (req, res) => {
     const snapshot = await itemData.get(); 
     console.log(snapshot._fieldsProto)
 
+    // const itemData1 = db.collection("Vendor's List").doc(vid).collection(category).doc(subcat);
+    // const snapshot1 = await itemData1.get(); 
+
+    // const itemData2 = db.collection(subcat).doc(itemid);
+    // const snapshot2 = await itemData2.get(); 
+
     if (snapshot._fieldsProto == null) {
       console.log('Enter the items into Collection first');
       res.json({
@@ -1879,6 +1884,16 @@ const postDeleteItem = (req, res) => {
       return;
     } 
 
+    // if (snapshot._fieldsProto == null || snapshot1._fieldsProto == null || snapshot2._fieldsProto == null) {
+    //   console.log('Enter the items into Collection first');
+    //   res.json({
+    //     status: "No Content",
+    //     statusCode: 204,
+    //     message: "No data found",
+    //     error: null
+    // })
+    //   return;
+    // } 
 
     await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({[itemid]: {outOfStock:true}}, { merge: true });
     await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update({"outOfStock":true});
