@@ -2005,6 +2005,15 @@ const postEditItem = (req, res) => {
     await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update(data);
     await db.collection(subcat).doc(itemid).update(data1);
 
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      data1,
+      error: null
+  }
+  res.json(resObj)
+
 }
 
   run().catch(console.error);
