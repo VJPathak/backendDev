@@ -33,6 +33,7 @@ let getCompletedOrders = controller.getCompletedOrders;
 let getVendorCatalogue = controller.getVendorCatalogue;
 let postDeleteItem = controller.postDeleteItem;
 let postEditItem = controller.postEditItem;
+let getSpeceficItems = controller.getSpeceficItems;
 
 const express = require("express");
 let router = express.Router();
@@ -157,5 +158,9 @@ router
 router
   .route("/edititem")
   .post(postEditItem);
+
+router
+  .route("/getitem")
+  .get(getSpeceficItems);
 
 module.exports = router;
