@@ -34,6 +34,7 @@ let getVendorCatalogue = controller.getVendorCatalogue;
 let postDeleteItem = controller.postDeleteItem;
 let postEditItem = controller.postEditItem;
 let getSpeceficItems = controller.getSpeceficItems;
+let postUpdateVendorVersion = controller.postUpdateVendorVersion;
 
 const express = require("express");
 let router = express.Router();
@@ -162,5 +163,9 @@ router
 router
   .route("/getitem")
   .get(getSpeceficItems);
+
+router
+  .route("/updatevendorversion")
+  .post(postUpdateVendorVersion);
 
 module.exports = router;
