@@ -977,9 +977,18 @@ const postVendorSignup = (req, res) => {
 
   let location = {latitude: Number(latitude), longitude: Number(longitude)}
 
-          async function run() {
-    
-              const data = {address: String(address), phno: Number(phno), vendorName: String(vendorName), gstNo: String(gstno), regNo: String(regno), location: location, isActive: 1, onBoarding: Date.now()};
+
+        async function run() {
+
+            const androidVersion = await db.collection("Version").doc("Android Version").get();
+            const iosVersion = await db. collection("Version").doc("IOS Version").get();
+
+            console.log(androidVersion._fieldsProto.version.stringValue);
+            console.log(iosVersion._fieldsProto.version.stringValue); 
+
+              const data = {address: String(address), phno: Number(phno), vendorName: String(vendorName), gstNo: String(gstno), regNo: String(regno), 
+              vendorAndroidVersion: androidVersion._fieldsProto.version.stringValue, vendorIOSVersion: iosVersion._fieldsProto.version.stringValue, location: location, isActive: 1, onBoarding: Date.now()};
+              
               let data1 = { phno, vendorName, location};
 
               const vendorData = db.collection("Vendor's List");
@@ -1011,25 +1020,36 @@ const postVendorSignup = (req, res) => {
 
               }
 
-              res.json(resObj)
-            }
+              res.json(resObj) 
+            } 
             
           }
 
-          run().catch(console.error);
+          run().catch(console.error); 
 
 }; 
 
 
-//demo param: http://localhost:3000/vendorLogin?phno=9191919191
+//demo param: http://localhost:3000/vendorLogin?phno=9191919191&type=android
+//demo param: http://localhost:3000/vendorLogin?phno=9191919191&type=ios
+
 const getVendorLogin = (req, res) => {
     
   let query = require('url').parse(req.url,true).query;
   let phno = query.phno;
+  let type = query.type;
 
   console.log(phno); 
 
           async function run() {
+
+            const androidVersion = await db.collection("Version").doc("Android Version").get();
+            const iosVersion = await db. collection("Version").doc("IOS Version").get();
+
+            let updatedAndroidVersion = androidVersion._fieldsProto.version.stringValue;
+            let updatedIOSVersion = iosVersion._fieldsProto.version.stringValue;
+
+            console.log(updatedAndroidVersion, updatedIOSVersion)
     
               const loginData = db.collection("Vendor's List");
               const snapshot = await loginData.where('phno', '==', Number(phno)).get();
@@ -1056,10 +1076,54 @@ const getVendorLogin = (req, res) => {
                   gstNo: doc.data().gstNo,
                   regNo: doc.data().regNo,
                   location: doc.data().location,
-                  vendorName: doc.data().vendorName
+                  vendorName: doc.data().vendorName,
+                  vendorAndroidVersion: doc.data().vendorAndroidVersion,
+                  vendorIOSVersion: doc.data().vendorIOSVersion
                 })
 
               });
+
+              //console.log(data[0].vendorAndroidVersion)
+
+              if(type == "android"){
+                if(data[0].vendorAndroidVersion == updatedAndroidVersion){
+                  data[0].isStable = true;
+                }
+                else{
+                  data[0].isStable = false;
+                }
+              }
+              if (type == "ios"){
+                if(data[0].vendorIOSVersion == updatedIOSVersion){
+                  data[0].isStable = true;
+                }
+                else{
+                  data[0].isStable = false;
+                }
+              }
+              if(type == null){
+
+                console.log('Type variable is missing or incorrect');
+                res.json({
+                  status: "Unauthorized",
+                  statusCode: 401,
+                  message: "Type variable is missing or incorrect, type variable should be 'android' or 'ios'",
+                  error: "Yes"
+              })
+                return;
+
+              }
+              
+              if(type != "ios" && type != "android"){
+                console.log('Type variable is incorrect');
+                res.json({
+                  status: "Unauthorized",
+                  statusCode: 401,
+                  message: "Type variable should be 'android' or 'ios'",
+                  error: "Yes"
+              })
+                return;
+              }
 
 
               let resObj = {
@@ -1837,6 +1901,7 @@ const getVendorCatalogue = (req, res) => {
 
 
 
+
 // http://localhost:3000/deleteitem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts
 
 // https://backendinit.onrender.com/addtokidswear?vid=835948&itemid=5567&category=Kidswear&subcategory=Boy&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
@@ -1849,6 +1914,8 @@ const postDeleteItem = (req, res) => {
   let itemid = query.itemid;
   let category = query.category;
   let subcat = query.subcategory;
+
+  console.log(vid, itemid, category, subcat)
 
   async function run() {
 
@@ -1895,16 +1962,15 @@ const postDeleteItem = (req, res) => {
     //   return;
     // } 
 
-    //await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({[itemid]: {"outOfStock":true}}, { merge: true });
-
-    await db.collection("Vendor's List").doc(vid).collection(category).doc(`${subcat}`).set({[`${itemid}`]: {"outOfStock":true}}, { merge: true });
+    //await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({ [`${itemid}.outOfStock`]: true }, { merge: true });
     
-    //DONE
-    await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update({"outOfStock":true});
-    //await db.collection(subcat).doc(itemid).update({outOfStock: true});
+    await db.collection("Vendor's List").doc(vid).collection(category).doc(`${subcat}`).set({[`${itemid}`]: {"outOfStock":true}}, { merge: true });
 
     //DONE
-    await db.collection(subcat).doc(itemid).set({"outOfStock":true}, { merge: true });
+    // await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update({"outOfStock":true});
+
+    //DONE
+    //await db.collection(subcat).doc(itemid).set({"outOfStock":true}, { merge: true });
     
     let resObj = {
       status: "success",
@@ -1924,6 +1990,8 @@ const postDeleteItem = (req, res) => {
 // http://localhost:3000/edititem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description1&sSize=5&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
 
 // vid, cat, subcat, vendorId
+
+// https://backendinit.onrender.com/edititem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description1&sSize=5&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
 
 const postEditItem = (req, res) => {
 
@@ -2101,13 +2169,82 @@ const getSpeceficItems = (req, res) => {
 }; 
 
 
+// http://localhost:3000/updatevendorversion?vid=15555&type=android
+
+const postUpdateVendorVersion = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let vid = query.vid;
+  let type = query.type;
+
+  async function run() {
+
+    const itemData = db.collection("Vendor's List").doc(vid);
+    const snapshot = await itemData.get(); 
+    console.log(snapshot._fieldsProto)
+
+    if (snapshot._fieldsProto == null) {
+      console.log('Enter the items into Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "No data found",
+        error: null
+    })
+      return;
+    } 
+
+    const androidVersion = await db.collection("Version").doc("Android Version").get();
+    const iosVersion = await db. collection("Version").doc("IOS Version").get();
+
+    let updatedAndroidVersion = androidVersion._fieldsProto.version.stringValue;
+    let updatedIOSVersion = iosVersion._fieldsProto.version.stringValue;
+
+    if(type == "android"){
+      let data = {vendorAndroidVersion : updatedAndroidVersion}
+      await db.collection("Vendor's List").doc(vid).update(data);
+    }
+    if(type == "ios"){
+      let data = {vendorIOSVersion : updatedIOSVersion}
+      await db.collection("Vendor's List").doc(vid).update(data);
+    }
+    if(type == null){
+      console.log('Type variable is missing or incorrect');
+      res.json({
+        status: "Unauthorized",
+        statusCode: 401,
+        message: "Type variable is missing or incorrect, type variable should be 'android' or 'ios'",
+        error: "Yes"
+    })
+      return;
+    }
+    if(type != "ios" && type != "android"){
+      console.log('Type variable is incorrect');
+      res.json({
+        status: "Unauthorized",
+        statusCode: 401,
+        message: "Type variable should be 'android' or 'ios'",
+        error: "Yes"
+    })
+      return;
+    }
+
+    let resObj = {
+      status: "success",
+      statusCode: 200,
+      message: "OK",
+      error: null
+  }
+  res.json(resObj)
+}
+
+  run().catch(console.error);
+
+}; 
+
+
 
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
 getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, 
 postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, postAddToCategory3, getMenswearItems, getWomenswearItems,
-getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem, getSpeceficItems}
-
-
-
-
-
+getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem, getSpeceficItems, postUpdateVendorVersion}
