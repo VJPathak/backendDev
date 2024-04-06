@@ -2022,10 +2022,92 @@ const postEditItem = (req, res) => {
 
 
 
+// http://localhost:3000/getitem?vid=835948&itemid=11
+const getSpeceficItems = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let vid = query.vid;
+  let itemid = query.itemid;
+    
+  async function run() {
+    
+    const catalogueData = db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid);
+    const snapshot = await catalogueData.get(); 
+    
+    if (snapshot._fieldsProto == null) {
+      console.log('Enter the items into Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "No data found",
+        error: null
+    })
+      return;
+    } 
+
+    console.log(snapshot._fieldsProto)
+    let listOfObjects = snapshot._fieldsProto.Images.arrayValue.values
+    imageArrData = []
+    listOfObjects.forEach(obj => {
+      imageArrData.push(obj.stringValue);
+    });
+
+    console.log(snapshot._fieldsProto.Size.mapValue.fields)
+
+    sizeInitData = snapshot._fieldsProto.Size.mapValue.fields
+
+    sizeData = {
+      S: sizeInitData.S.integerValue,
+      XL: sizeInitData.XL.integerValue,
+      L: sizeInitData.L.integerValue,
+      M: sizeInitData.M.integerValue,
+      XXL: sizeInitData.XXL.integerValue
+    }
+    console.log(sizeData)
+
+    data = {
+      vid: vid,
+      itemid:itemid,
+      Category: snapshot._fieldsProto.Category.stringValue,
+      lockinPeriod: snapshot._fieldsProto.lockinPeriod.integerValue,
+      subCategory: snapshot._fieldsProto.subCategory.stringValue,
+      Images: imageArrData,
+      Size: sizeData,
+      Name: snapshot._fieldsProto.Name.stringValue,
+      lockinStart: snapshot._fieldsProto.lockinStart.integerValue,
+      Description: snapshot._fieldsProto.Description.stringValue,
+      Price: snapshot._fieldsProto.Price.integerValue,
+      outOfStock: snapshot._fieldsProto.outOfStock.booleanValue
+    }
+
+          console.log("data is:")
+          console.log(data)
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+
+              res.json(resObj)
+              
+                  
+              }
+                
+              run().catch(console.error);
+
+}; 
+
+
+
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
 getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, 
 postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, postAddToCategory3, getMenswearItems, getWomenswearItems,
-getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem}
+getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem, getSpeceficItems}
+
+
 
 
 
