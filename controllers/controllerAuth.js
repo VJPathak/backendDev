@@ -2170,7 +2170,6 @@ const getSpeceficItems = (req, res) => {
 
 
 // http://localhost:3000/updatevendorversion?vid=15555&type=android
-
 const postUpdateVendorVersion = (req, res) => {
 
   let query = require('url').parse(req.url,true).query;
@@ -2203,10 +2202,28 @@ const postUpdateVendorVersion = (req, res) => {
     if(type == "android"){
       let data = {vendorAndroidVersion : updatedAndroidVersion}
       await db.collection("Vendor's List").doc(vid).update(data);
+      let resObj = {
+        status: "success",
+        statusCode: 200,
+        message: "OK",
+        data,
+        error: null
+    }
+    res.json(resObj)
+      //data = {androidVersion}
     }
     if(type == "ios"){
       let data = {vendorIOSVersion : updatedIOSVersion}
       await db.collection("Vendor's List").doc(vid).update(data);
+      let resObj = {
+        status: "success",
+        statusCode: 200,
+        message: "OK",
+        data,
+        error: null
+    }
+    res.json(resObj)
+      // data = {iosVersion}
     }
     if(type == null){
       console.log('Type variable is missing or incorrect');
@@ -2229,19 +2246,11 @@ const postUpdateVendorVersion = (req, res) => {
       return;
     }
 
-    let resObj = {
-      status: "success",
-      statusCode: 200,
-      message: "OK",
-      error: null
-  }
-  res.json(resObj)
+    
+  
 }
-
   run().catch(console.error);
-
 }; 
-
 
 
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
