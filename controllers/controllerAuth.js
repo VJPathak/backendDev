@@ -2035,7 +2035,7 @@ const postEditItem = (req, res) => {
                   Price: Number(price),
                   Size: sizes,   
                   Category: category, 
-                  outOfStock: Boolean(outofstock), 
+                  outOfStock: outofstock, 
                   lockinPeriod: 15,
                   lockinStart: Date.now()};
 
@@ -2049,7 +2049,7 @@ const postEditItem = (req, res) => {
                   Price: Number(price),
                   Size: sizes,   
                   Category: category, 
-                  outOfStock: Boolean(outofstock), 
+                  outOfStock: outofstock, 
                   lockinPeriod: 15,
                   lockinStart: Date.now()};
 
