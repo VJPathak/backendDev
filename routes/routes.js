@@ -18,6 +18,7 @@ let postAddress = controller.postAddress;
 let getAddress = controller.getAddress;
 let getCat1Reviews = controller.getCat1Reviews;
 let getCat2Reviews = controller.getCat2Reviews;
+let getCategory = controller.getCategory;
 
 // Vendor Controllers
 let postVendorUpdate = controller.postVendorUpdate;
@@ -35,6 +36,7 @@ let postDeleteItem = controller.postDeleteItem;
 let postEditItem = controller.postEditItem;
 let getSpeceficItems = controller.getSpeceficItems;
 let postUpdateVendorVersion = controller.postUpdateVendorVersion;
+let sendNotification = controller.sendNotification;
 
 const express = require("express");
 let router = express.Router();
@@ -86,7 +88,6 @@ router
   .route("/addtocart")
   .post(postAddToCart)
 
-
 router
   .route("/viewcart")
   .get(getCartItems)
@@ -106,6 +107,10 @@ router
 router
   .route("/cat2reviews")
   .get(getCat2Reviews);
+
+router
+  .route("/getcategory")
+  .get(getCategory);
 
 // vendors
 router
@@ -167,5 +172,9 @@ router
 router
   .route("/updatevendorversion")
   .post(postUpdateVendorVersion);
+
+router
+  .route("/sendnotification")
+  .get(sendNotification);
 
 module.exports = router;
