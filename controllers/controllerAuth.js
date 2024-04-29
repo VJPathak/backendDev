@@ -10,11 +10,9 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-
 //demo param: http://localhost:3000/signup?uid=1111111111&name=Vashishth%20Pathak&email=pathakvashishth05@gmail.com&phno=12366666666&address=this%20is%20demo%20address&pincode=202013
 const postSignup = (req, res) => {
-    
-    //option-1
+
     let query = require('url').parse(req.url,true).query;
     let uid = query.uid;
     let name = query.name;
@@ -959,7 +957,6 @@ console.log(data)
 
 }; 
 
-
 /*
 Mens Category:
 > Shirts
@@ -997,7 +994,7 @@ const getCategory = (req, res) => {
     if (snapshot.empty) {
       console.log('Enter the items into Collection first');
       res.json({
-        status: "No Content",
+        status: categories,
         statusCode: 204,
         message: "No data found",
         error: null
@@ -1057,7 +1054,6 @@ const getCategory = (req, res) => {
 //demo param: http://localhost:3000/vendorSignup?vid=12345&phno=9191919191&vendorName=Vashishth%20Pathak&gstno=ab1245dgfhf&regno=4567dcbhd7&address=this%20is%20demo%20address&longitude=202013.1&latitude=465445.1
 const postVendorSignup = (req, res) => {
 
-  //option-1
   let query = require('url').parse(req.url,true).query;
 
   let vid = query.vid;
@@ -1070,7 +1066,6 @@ const postVendorSignup = (req, res) => {
   let longitude = query.longitude;
 
   let location = {latitude: Number(latitude), longitude: Number(longitude)}
-
 
         async function run() {
 
@@ -1099,7 +1094,6 @@ const postVendorSignup = (req, res) => {
                   message: "OK",
                   data,
                   error: null
-
               }
               res.json(resObj)
             }
@@ -1120,7 +1114,6 @@ const postVendorSignup = (req, res) => {
           }
 
           run().catch(console.error); 
-
 }; 
 
 
@@ -1142,8 +1135,6 @@ const getVendorLogin = (req, res) => {
 
             let updatedAndroidVersion = androidVersion._fieldsProto.version.stringValue;
             let updatedIOSVersion = iosVersion._fieldsProto.version.stringValue;
-
-            console.log(updatedAndroidVersion, updatedIOSVersion)
     
               const loginData = db.collection("Vendor's List");
               const snapshot = await loginData.where('phno', '==', Number(phno)).get();
@@ -1177,8 +1168,6 @@ const getVendorLogin = (req, res) => {
 
               });
 
-              //console.log(data[0].vendorAndroidVersion)
-
               if(type == "android"){
                 if(data[0].vendorAndroidVersion == updatedAndroidVersion){
                   data[0].isStable = true;
@@ -1205,7 +1194,6 @@ const getVendorLogin = (req, res) => {
                   error: "Yes"
               })
                 return;
-
               }
               
               if(type != "ios" && type != "android"){
@@ -1219,7 +1207,6 @@ const getVendorLogin = (req, res) => {
                 return;
               }
 
-
               let resObj = {
                 status: "success",
                 statusCode: 200,
@@ -1227,19 +1214,15 @@ const getVendorLogin = (req, res) => {
                 data,
                 error: null
             }
-            res.json(resObj)
-             
+            res.json(resObj)            
               }
-      
           run().catch(console.error);
-
 }; 
 
 
 //demo param: http://localhost:3000/vendorUpdateData?vid=12345&phno=9191919100&vendorName=VJ%20Pathak&address=this%20is%20demo%20address&longitude=202013.1&latitude=465445.1
 const postVendorUpdate = (req, res) => {
 
-  //option-1
   let query = require('url').parse(req.url,true).query;
 
   let vid = query.vid;
@@ -1249,7 +1232,7 @@ const postVendorUpdate = (req, res) => {
   let latitude = query.latitude;
   let longitude = query.longitude;
 
-  let location = {latitude: Number(latitude), longitude: Number(longitude)}
+  let location = {latitude: Number(latitude), longitude: Number(longitude)} 
 
           async function run() {
     
@@ -1265,28 +1248,18 @@ const postVendorUpdate = (req, res) => {
                   message: "OK",
                   data,
                   error: null
-
-              }
-              
+              }              
               res.json(resObj)
-          
           }
-
           run().catch(console.error);
-
 }; 
 
 
-// http://localhost:3000/addtomenswear?vid=12345&itemid=11&category=Menswear&subcategory=Shirts&type=Tshirt&price=1000&desc=Some%20Description&size={"XL":10,"XXL":13, "XXL": 5}&images=["https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link","https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link"]
 
 // http://localhost:3000/addtomenswear?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
-
-
-// https://backendinit.onrender.com/addtomenswear?vid=835948&itemid=11&category=Menswear&subcategory=kurtas&type=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
-
 // https://backendinit.onrender.com/addtomenswear?vid=835948&itemid=44&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
 
-const postAddToCategory1= (req, res) => {
+const postAddToCategory1 = (req, res) => {
 
   let query = require('url').parse(req.url,true).query;
 
@@ -1371,29 +1344,22 @@ const postAddToCategory1= (req, res) => {
                 await db.collection("Vendor's List").doc(vid).collection("Menswear").doc(subcat).update(itemid,data);
                 const docRef = db.collection("Vendor's List").doc(vid).collection("Menswear").doc(subcat);
 
-                // Use a transaction to ensure data consistency
                 await db.runTransaction(async (transaction) => {
                   const doc = await transaction.get(docRef);
                   if (!doc.exists) {
                     throw new Error('Document does not exist');
                   }
-              
-                  // Get the existing array (similar to previous example)
+
                   let existingArray = doc.get("articles");
                   if (!existingArray) {
                     existingArray = [];
                   }
-              
-                  // Add the new element
+
                   existingArray.push(itemid);
-              
-                  // Update the document with the modified array
+
                   transaction.set(docRef, { ["articles"]: existingArray }, { merge: true });
                 });
-              
-                
-                console.log('Element pushed to array successfully!');
-  
+                console.log('Element pushed to array successfully!'); 
               }
 
               await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).set(data);
@@ -1408,22 +1374,16 @@ const postAddToCategory1= (req, res) => {
             }
             res.json(resObj)
           }
-
           run().catch(console.error);
-
 }; 
 
 
 
 // http://localhost:3000/addtowomenswear?vid=835948&itemid=1111&category=Womenswear&subcategory=Sarees&name=Silk Saree&price=2500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
-// https://backendinit.onrender.com/addtowomenswear?vid=835948&itemid=111&category=Womenswear&subcategory=kurtis&type=Shirt&price=2500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
-
-
 // https://backendinit.onrender.com/addtowomenswear?vid=835948&itemid=4444&category=Womenswear&subcategory=Sarees&name=Nylon Saree&price=8500&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
 
 const postAddToCategory2= (req, res) => {
 
-  //option-1
   let query = require('url').parse(req.url,true).query;
 
   let vid = query.vid;
@@ -1435,10 +1395,6 @@ const postAddToCategory2= (req, res) => {
   let price = query.price;
   let name = query.name;
 
-  // const parsedUrlImage = url.parse(req.url,true);
-  // const images = JSON.parse(parsedUrlImage.query.images);
-  // console.log(images); 
-
   let image1 = query.image1;
   let image2 = query.image2;
   let image3 = query.image3;
@@ -1449,10 +1405,6 @@ const postAddToCategory2= (req, res) => {
   images[1] = image2;
   images[2] = image3;
   images[3] = image4;
-
-  // const parsedUrlSizes = url.parse(req.url,true);
-  // const size = JSON.parse(parsedUrlSizes.query.size);
-  // console.log(size); 
 
   let sizes = {
     S: Number(query.sSize),
@@ -1508,29 +1460,22 @@ const postAddToCategory2= (req, res) => {
       await db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(subcat).update(itemid,data);
       const docRef = db.collection("Vendor's List").doc(vid).collection("Womenswear").doc(subcat);
 
-      // Use a transaction to ensure data consistency
       await db.runTransaction(async (transaction) => {
         const doc = await transaction.get(docRef);
         if (!doc.exists) {
           throw new Error('Document does not exist');
         }
-    
-        // Get the existing array (similar to previous example)
+
         let existingArray = doc.get("articles");
         if (!existingArray) {
           existingArray = [];
         }
-    
-        // Add the new element
+
         existingArray.push(itemid);
-    
-        // Update the document with the modified array
+
         transaction.set(docRef, { ["articles"]: existingArray }, { merge: true });
       });
-    
-      
       console.log('Element pushed to array successfully!');
-
     }
 
     await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).set(data);
@@ -1545,19 +1490,14 @@ const postAddToCategory2= (req, res) => {
   }
   res.json(resObj)
 }
-
-          run().catch(console.error);
-
+      run().catch(console.error);
 }; 
 
 // http://localhost:3000/addtokidswear?vid=835948&itemid=77&category=Kidswear&subcategory=Boy&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image2=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image3=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link&image4=https://drive.google.com/file/d/1NhydgnDFkUB3MLj8gOHG7SqNSxdX3IrE/view?usp=drive_link
-
 // https://backendinit.onrender.com/addtokidswear?vid=835948&itemid=5567&category=Kidswear&subcategory=Boy&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
 
+const postAddToCategory3 = (req, res) => {
 
-const postAddToCategory3= (req, res) => {
-
-  //option-1
   let query = require('url').parse(req.url,true).query;
 
   let vid = query.vid;
@@ -1565,13 +1505,8 @@ const postAddToCategory3= (req, res) => {
   let subcat = query.subcategory;
   let itemid = query.itemid;
   let desc = query.desc;
-  // let size = query.size;
   let price = query.price;
   let name = query.name;
-
-  // const parsedUrlImage = url.parse(req.url,true);
-  // const images = JSON.parse(parsedUrlImage.query.images);
-  // console.log(images); 
 
   let image1 = query.image1;
   let image2 = query.image2;
@@ -1582,11 +1517,7 @@ const postAddToCategory3= (req, res) => {
   images[0] = image1;
   images[1] = image2;
   images[2] = image3;
-  images[3] = image4;
-
-  // const parsedUrlSizes = url.parse(req.url,true);
-  // const size = JSON.parse(parsedUrlSizes.query.size);
-  // console.log(size); 
+  images[3] = image4; 
 
   let sizes = {
     S: Number(query.sSize),
@@ -1678,9 +1609,7 @@ const postAddToCategory3= (req, res) => {
   }
   res.json(resObj)
 }
-
   run().catch(console.error);
-
 }; 
 
 
@@ -1843,7 +1772,6 @@ const getPendingOrders = (req, res) => {
       return;
     } 
 
-
     data = []
 
                 snapshot.forEach(doc => {
@@ -1866,13 +1794,9 @@ const getPendingOrders = (req, res) => {
                 data,
                 error: null
             }
-
-              res.json(resObj)
-                  
-              }
-                
+              res.json(resObj)             
+              }               
               run().catch(console.error);
-
 }; 
 
 
@@ -1898,7 +1822,6 @@ const getCompletedOrders = (req, res) => {
       return;
     } 
 
-
     data = []
 
                 snapshot.forEach(doc => {
@@ -1921,13 +1844,9 @@ const getCompletedOrders = (req, res) => {
                 data,
                 error: null
             }
-
-              res.json(resObj)
-                  
-              }
-                
+              res.json(resObj)                 
+              }               
               run().catch(console.error);
-
 }; 
 
 
@@ -1952,7 +1871,6 @@ const getVendorCatalogue = (req, res) => {
     })
       return;
     } 
-
 
     data = []
 
@@ -1984,22 +1902,16 @@ const getVendorCatalogue = (req, res) => {
                 data,
                 error: null
             }
-
-              res.json(resObj)
-                  
-              }
-                
+              res.json(resObj)                 
+              }               
               run().catch(console.error);
-
 }; 
 
 
 
 
 // http://localhost:3000/deleteitem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts
-
 // https://backendinit.onrender.com/addtokidswear?vid=835948&itemid=5567&category=Kidswear&subcategory=Boy&name=Tshirt&price=1000&desc=Some%20Description&sSize=10&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
-
 
 const postDeleteItem = (req, res) => {
 
@@ -2028,12 +1940,6 @@ const postDeleteItem = (req, res) => {
     const snapshot = await itemData.get(); 
     console.log(snapshot._fieldsProto)
 
-    // const itemData1 = db.collection("Vendor's List").doc(vid).collection(category).doc(subcat);
-    // const snapshot1 = await itemData1.get(); 
-
-    // const itemData2 = db.collection(subcat).doc(itemid);
-    // const snapshot2 = await itemData2.get(); 
-
     if (snapshot._fieldsProto == null) {
       console.log('Enter the items into Collection first');
       res.json({
@@ -2044,26 +1950,9 @@ const postDeleteItem = (req, res) => {
     })
       return;
     } 
-
-    // if (snapshot._fieldsProto == null || snapshot1._fieldsProto == null || snapshot2._fieldsProto == null) {
-    //   console.log('Enter the items into Collection first');
-    //   res.json({
-    //     status: "No Content",
-    //     statusCode: 204,
-    //     message: "No data found",
-    //     error: null
-    // })
-    //   return;
-    // } 
-
-    //await db.collection("Vendor's List").doc(vid).collection(category).doc(subcat).set({ [`${itemid}.outOfStock`]: true }, { merge: true });
-    
+ 
     await db.collection("Vendor's List").doc(vid).collection(category).doc(`${subcat}`).set({[`${itemid}`]: {"outOfStock":true}}, { merge: true });
-
-    //DONE
     await db.collection("Vendor's List").doc(vid).collection("Catalogue").doc(itemid).update({"outOfStock":true});
-
-    //DONE
     await db.collection(subcat).doc(itemid).set({"outOfStock":true}, { merge: true });
     
     let resObj = {
@@ -2074,17 +1963,11 @@ const postDeleteItem = (req, res) => {
   }
   res.json(resObj)
 }
-
   run().catch(console.error);
-
 }; 
 
 
-
 // http://localhost:3000/edititem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description1&sSize=5&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605
-
-// vid, cat, subcat, vendorId
-
 // https://backendinit.onrender.com/edititem?vid=835948&itemid=11&category=Menswear&subcategory=Shirts&name=Tshirt&price=1000&desc=Some%20Description1&sSize=5&mSize=20&lSize=9&xlSize=40&xxlSize=40&image1=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image2=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image3=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&image4=https://firebasestorage.googleapis.com/v0/b/duds-68a6d.appspot.com/o/ProductMen%2F1000000033?alt=media&token=f1b07e4e-eb85-4ca5-89f5-a1227d9d6605&outofstock=true
 
 const postEditItem = (req, res) => {
@@ -2129,7 +2012,7 @@ const postEditItem = (req, res) => {
                   Price: Number(price),
                   Size: sizes,   
                   Category: category, 
-                  outOfStock: outofstock, 
+                  outOfStock: Boolean(outofstock), 
                   lockinPeriod: 15,
                   lockinStart: Date.now()};
 
@@ -2143,7 +2026,7 @@ const postEditItem = (req, res) => {
                   Price: Number(price),
                   Size: sizes,   
                   Category: category, 
-                  outOfStock: outofstock, 
+                  outOfStock: Boolean(outofstock), 
                   lockinPeriod: 15,
                   lockinStart: Date.now()};
 
@@ -2247,14 +2130,9 @@ const getSpeceficItems = (req, res) => {
                 data,
                 error: null
             }
-
-              res.json(resObj)
-              
-                  
-              }
-                
-              run().catch(console.error);
-
+      res.json(resObj) 
+    }
+  run().catch(console.error);
 }; 
 
 
@@ -2335,14 +2213,91 @@ const postUpdateVendorVersion = (req, res) => {
       return;
     }
 
-    
-  
 }
   run().catch(console.error);
 }; 
 
 
+
+// http://localhost:3000/sendnotification
+const sendNotification = (req, res) => {
+
+
+  async function run() {
+
+    // const admin = require('firebase-admin');
+
+    // async function getAccessToken() {
+    //   try {
+    //     const accessToken = await admin.credential.applicationDefault().getAccessToken();
+    //     return accessToken.access_token;
+    //   } catch (err) {
+    //     console.error('Unable to get access token');
+    //     console.error(err);
+    //   }
+          
+    // }
+    // getAccessToken()
+
+
+
+    var FCM = require('fcm-node');
+    var serverKey = 'AAAANc11AVg:APA91bElg_sLuRg5kV5fX6sVDdEy5Xwrvn3ezPs2GJlrz9ygz9rx3M_fGE__wZ98Ke4gLV2-U_QScYB9b2i_QEWtkEM1cWVf8b3oNoxKWMzErVv8_1lkJM1Nko8mfw_ODKva1YhHbK22';
+    var fcm = new FCM(serverKey);
+
+    var message = {
+	      to:'epL3mcu0QgyG6mtn58lW0s:APA91bHroT48WjudvdHUuEc85tFNKud9k6sPmOSlPDmQNo30WBUj-ICh3SMy5LYoyTWT3xswWcYpw4NSTiA0PjIZx4LzTCvG0R9d7OQ-DY6eElhTZPOwioDkSnIYorxEaocOvXHkZZIe',
+        notification: {
+            title: 'NotifcatioTestAPP',
+            body: '{"Message from node js app"}',
+        },
+
+        data: { //you can send only notification or only data(or include both)
+            title: 'ok cdfsdsdfsd',
+            body: '{"name" : "okg ooggle ogrlrl","product_id" : "123","final_price" : "0.00035"}'
+        }
+
+    };
+
+    fcm.send(message, function(err, response) {
+        if (err) {
+            console.log("Something has gone wrong!"+err);
+			console.log("Respponse:! "+response);
+        } else {
+            // showToast("Successfully sent with response");
+            console.log("Successfully sent with response: ", response);
+        }
+
+    });
+
+
+  // const Pushy = require('pushy');
+
+  // const pushyAPI = new Pushy('');
+  
+  // pushyAPI.generateToken((err, deviceToken) => {
+  //     if (err) {
+  //         console.error('Error generating device token:', err);
+  //     } else {
+  //         console.log('Generated device token:', deviceToken);
+  //     }
+  // });
+
+
+
+
+
+
+
+
+  }
+
+  
+  run().catch(console.error);
+}; 
+
+
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
-getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, getCategory, 
+getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, getCategory,  
 postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, postAddToCategory3, getMenswearItems, getWomenswearItems,
-getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem, getSpeceficItems, postUpdateVendorVersion}
+getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem, getSpeceficItems, postUpdateVendorVersion, sendNotification}
