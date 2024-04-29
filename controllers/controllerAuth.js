@@ -960,6 +960,100 @@ console.log(data)
 }; 
 
 
+/*
+Mens Category:
+> Shirts
+> Tshirts
+> Lower Wear
+> Kurta and Sets
+> Ethnics sets
+> Party wear
+
+Womems Category:
+> Tops and Tees
+> Kurta Sets
+> Dresses
+> Jeans
+> Sarees
+> Lehngas
+> Funky wear
+
+Kids Category:
+> boy
+> girl
+*/
+
+// http://localhost:3000/getcategory?cat=Shirts
+const getCategory = (req, res) => {
+
+  let query = require('url').parse(req.url,true).query;
+  let cat = query.cat;
+    
+  async function run() {
+    
+    const getCategoryData = db.collection(cat);
+    const snapshot = await getCategoryData.get(); 
+    
+    if (snapshot.empty) {
+      console.log('Enter the items into Collection first');
+      res.json({
+        status: "No Content",
+        statusCode: 204,
+        message: "No data found",
+        error: null
+    })
+      return;
+    } 
+
+    data = []
+
+                snapshot.forEach(doc => {
+                  console.log(doc.id, '=>', doc.data());
+                  let id = doc.id
+                  data.push({
+                    id: id,
+                    Category: doc.data().Category,
+                    Description: doc.data().Description,
+                    Images: doc.data().Images,
+                    Name: doc.data().Name,
+                    Price: doc.data().Price,
+                    Size: doc.data().Size,
+                    outOfStock: doc.data().outOfStock,
+                    subCategory: doc.data().subCategory,
+                    vid: doc.data().vid
+                  })
+                });
+
+          console.log("data is:")
+          console.log(data)
+
+              let resObj = {
+                status: "success",
+                statusCode: 200,
+                message: "OK",
+                data,
+                error: null
+            }
+              res.json(resObj)                 
+              }               
+              run().catch(console.error);
+}; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//.........................................................................................................................................................//
+
 //demo param: http://localhost:3000/vendorSignup?vid=12345&phno=9191919191&vendorName=Vashishth%20Pathak&gstno=ab1245dgfhf&regno=4567dcbhd7&address=this%20is%20demo%20address&longitude=202013.1&latitude=465445.1
 const postVendorSignup = (req, res) => {
 
@@ -2249,6 +2343,6 @@ const postUpdateVendorVersion = (req, res) => {
 
 
 module.exports = {postSignup, getLogin, getBannerOffers, postCat1Review, postCat2Review, postItemListCat1, postItemListCat2, 
-getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, 
+getItemListCat1, getItemListCat2, postCoupon, getCoupon, postAddToCart, getCartItems, postAddress, getAddress, getCat1Reviews, getCat2Reviews, getCategory, 
 postVendorSignup, getVendorLogin, postVendorUpdate, postAddToCategory1, postAddToCategory2, postAddToCategory3, getMenswearItems, getWomenswearItems,
 getPendingOrders, getCompletedOrders, getVendorCatalogue, postDeleteItem, postEditItem, getSpeceficItems, postUpdateVendorVersion}
