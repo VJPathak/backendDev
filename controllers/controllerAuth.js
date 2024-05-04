@@ -1,12 +1,23 @@
 const admin = require('firebase-admin');
 
+//orginal
 //const serviceAccount = require("../connection.json");
-const serviceAccount = process.env.SEC;
+
+//const serviceAccount = process.env.SEC;
 // const validate = require("../config/validators")
 
+//orginal
 //initializing our secret key
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount)
+// });
+
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert({
+      projectId: process.env.projectId,
+      clientEmail: process.env.clientEmail,
+      privateKey: process.env.privateKey,
+  }),
 });
 
 const db = admin.firestore();
