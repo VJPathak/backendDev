@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 //const serviceAccount = require("../connection.json");
-const serviceAccount = process.env;
+const serviceAccount = process.env.SEC;
 // const validate = require("../config/validators")
 
 //initializing our secret key
