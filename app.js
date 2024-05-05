@@ -40,7 +40,7 @@ app.set('view engine','ejs');
 app.listen(3000, function() { 
   console.log('Server running on port 3000'); 
   console.log("Initiating Our Project :) ");
-  console.log(process.env.CONN)
+  console.log(process.env.VJP)
 });
 // }).setTimeout(100000000);
 
